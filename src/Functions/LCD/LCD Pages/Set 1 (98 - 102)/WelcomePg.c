@@ -3,5 +3,5 @@
 
 void WelcomePg () {
   setLcdText(uart1, 1, " Welcome Master ");
-  setLCDText(uart1, 1, "<              >");
+  setLCDText(uart1, 2, "<              >");
 };
