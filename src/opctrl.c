@@ -36,13 +36,6 @@ void OpCtrl ()
     while (1) {
       OpCtrlStep();
       delay(10);
-      if(Page_Num == 50) {
-        lcdPrint(uart1, 1, "Left Sen %d ", encoderGet(enc1));
-        lcdPrint(uart1, 2, "Right Sen %d  ", encoderGet(enc2));
-        if(joystickGetDigital(1,7,JOY_UP)) AutonSelection();
-        if(joystickGetDigital(1,7,JOY_DOWN)) AutoUnHang();
-        if(joystickGetDigital(1,7,JOY_LEFT)) UserHang();
-      }
     }
 };
 
