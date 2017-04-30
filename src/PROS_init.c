@@ -41,13 +41,4 @@ void initializeIO ()
  * can be implemented in this task if desired.
  */
 void initialize ()
-{
-  lcdInit(uart1);
-  lcdClear(uart1);
-  lcdSetText(uart1, 1, " Welcome Aditya "); //1 spaces
-  lcdSetText(uart1, 2, "<              >"); //void
-  gyro1 = gyroInit(GYR, 0);
-  enc1 = encoderInit(LeftTopENC, LeftBotENC, false);
-  enc2 = encoderInit(RightTopENC, RightBotENC, false);
-	setTeamName("2831X");
-};
+{};

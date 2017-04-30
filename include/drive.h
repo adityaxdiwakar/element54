@@ -1,6 +1,10 @@
-#ifndef _DRIVE_H_
-#define _DRIVE_H_
+#pragma once
 
-void driveSet(int left, int right);
-
-#endif
+void BaseClear ();
+void BaseRotate (float pwr);
+void BaseForward (float pwr);
+void BaseRight (float pwr);
+void Norm (float n);
+void BaseApply ();
+void BaseApply_Record ();
+void SetBase();

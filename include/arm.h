@@ -1,6 +1,6 @@
-#ifndef _ARM_H_
-#define _ARM_H_
+#pragma once
 
-void armSet(int speed);
-
-#endif
+void SetDumper (signed char pwr);
+void CheckDumper ();
+void Dumper ();
+void Dumper_Record ();

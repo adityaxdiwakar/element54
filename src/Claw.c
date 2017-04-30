@@ -1,4 +1,4 @@
-#include "Claw.h"
+#include "claw.h"
 #include "API.h"
 #include "MotorDef.h"
 

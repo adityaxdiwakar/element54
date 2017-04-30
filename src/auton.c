@@ -1,6 +1,6 @@
 #include "API.h"
-#include "Dumper.h"
-#include "Claw.h"
+#include "arm.h"
+#include "claw.h"
 #include "MotorDef.h"
 #include "PreferredPronouns.h"
 #include "misc.h"

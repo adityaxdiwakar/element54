@@ -11,9 +11,9 @@
  */
 
 #include "auton.h"
-#include "Base.h"
-#include "Dumper.h"
-#include "Claw.h"
+#include "drive.h"
+#include "arm.h"
+#include "claw.h"
 #include "API.h"
 #include "MotorDef.h"
 #include "functions.h"
