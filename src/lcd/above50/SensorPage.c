@@ -7,5 +7,13 @@ void Pg_Sensor() {
   if (lcdReadButtons(uart1) == 2) {
     int PgNum = PgNum * 10;
     pageChecker();
-    }
   }
+  if (PgNum == PgNum * 10) { //Gyro page
+    lcdSetText(uart1, 1, "Gyro is");
+    lcdPrint(uart1, 2, "%d", gyro);
+  }
+  if (PgNum == PgNum * 10 + 1) { //Autonomous potentiometer page
+    lcdSetText(uart1, 1, "Auton Selector");
+    lcdPrint(uart1, 2, "%d", autopot);
+  }
+}

@@ -4,3 +4,5 @@ void Pg_Home();
 void pageChecker();
 
 extern int PgNum;
+int gyro;
+int autopot;
