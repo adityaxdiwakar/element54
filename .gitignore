@@ -1,0 +1,4 @@
+#ignoring compiled programs
+*.o
+*.elf
+*.bin
