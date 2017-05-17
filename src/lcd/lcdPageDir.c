@@ -3,11 +3,13 @@
 void PageDir() {
 if (PgNum == 50) {
   Pg_Home();
-}/*
-if (PageNum == 49) {
+} 
+if (PgNum == 49) {
+  Pg_Auto();
 }
-if (PageNum == 51) {
-}
+if (PgNum == 51) {
+  Pg_Sensor();
+} /*
 if (PageNum == 48) {
 }
 if (PageNum == 52) {
