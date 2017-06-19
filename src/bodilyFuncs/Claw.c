@@ -7,6 +7,7 @@ void SetClaw (signed char state)
 {
   digitalWrite(12, state);
 };
+
 // Claw Step, Non-Recording
 void Claw ()
 {
