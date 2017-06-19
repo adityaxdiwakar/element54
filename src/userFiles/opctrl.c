@@ -27,7 +27,7 @@ inline void OpCtrlStep ()
     RenderBase();
     BaseApply();
     Claw();
-    Dumper();
+    Arm();
 
 }
 void OpCtrl ()
@@ -44,23 +44,23 @@ inline void OpCtrlStep_Record ()
     RenderBase();
     BaseApply_Record();
     Claw_Record();
-    Dumper_Record();
+    Arm_Record();
 };
 void RobotOff ()
 {
     BaseClear();
     BaseApply();
-    SetDumper(0);
+    SetArm(0);
     SetClaw(0);
 };
 extern volatile signed char LEFT_Prev,RIGHT_Prev;
-extern volatile signed char DumperPower_Prev;
+extern volatile signed char ArmPower_Prev;
 extern volatile signed char ClawPower_Prev;
 void ResetPrevs ()
 {
     LEFT_Prev = 0;
     RIGHT_Prev = 0;
-    DumperPower_Prev = 0;
+    ArmPower_Prev = 0;
     ClawPower_Prev = 0; // Claw starts open due to pre-auton.
 };
 volatile unsigned short FrameTime;
@@ -148,7 +148,7 @@ void OpCtrl_Record ()
         if (FrameTime < LastFrame + UpdateRate)
         {
             // Don't record two frames with the same time stamp.
-            // Don't update anything (except dumper check) because we can't record this fast.
+            // Don't update anything (except Arm check) because we can't record this fast.
             continue;
         };
         LastFrame = FrameTime;

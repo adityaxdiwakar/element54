@@ -6,10 +6,8 @@ Encoder enc2; //right
 
 #define Page_Num 50
 
-#define Arm_L0 3 // Power Exp
-#define Arm_L1 2
-#define Arm_R0 9 // Power Exp
-#define Arm_R1 8
+#define Arm_L0 4 // Power Exp
+#define Arm_R0 7 // Power Exp
 
 #define ClawLeftMotor 1
 #define ClawRightMotor 10
@@ -17,10 +15,12 @@ Encoder enc2; //right
 #define BaseMotorTypeScale 392
 #define TorqueMotorEncoderScale 627.2
 
-#define Base_FL 5
-#define Base_FR 7
-#define Base_BL 4
-#define Base_BR 6
+#define Base_FL 1
+#define Base_FL2 2
+#define Base_BL 3
+#define Base_FR 10
+#define Base_FR2 9
+#define Base_BR 8
 
 //Sensors (Digital)
 #define DownBumpP 12

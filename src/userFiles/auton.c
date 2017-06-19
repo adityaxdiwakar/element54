@@ -84,15 +84,17 @@ void FollowInstructions ()
         switch (instrptr->label) // Change what this instruction specifies.
         {
             case Label_BaseLEFT:
-            motorSet(Base_FL,-power);
+            motorSet(Base_FL,power);
+            motorSet(Base_FR,power);
             motorSet(Base_BL,power);
             break;
             case Label_BaseRIGHT:
-            motorSet(Base_FR,-power);
+            motorSet(Base_FR,power);
+            motorSet(Base_FR2,power);
             motorSet(Base_BR,power);
             break;
-            case Label_Dumper:
-            SetDumper(power);
+            case Label_Arm:
+            SetArm(power);
             break;
             case Label_Claw:
             SetClaw(power);

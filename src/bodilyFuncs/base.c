@@ -5,9 +5,11 @@ volatile float LEFT,RIGHT;
 void SetBase(signed char pwr)
 {
   motorSet(Base_FL, pwr);
+  motorSet(Base_FL2, pwr);
   motorSet(Base_BL, pwr);
   motorSet(Base_BR, pwr);
   motorSet(Base_FR, pwr);
+  motorSet(Base_FR2, pwr);
 }; //not used in program
 
 void BaseClear ()
@@ -39,10 +41,12 @@ void BaseApply ()
 {
     Norm(LEFT);
     Norm(RIGHT);
-    left_pwr = LEFT * -127.5f;
+    left_pwr = LEFT * 127.5f;
     right_pwr = RIGHT * 127.5f;
-    motorSet(Base_FL,-left_pwr);
-    motorSet(Base_FR,-right_pwr);
+    motorSet(Base_FL,left_pwr);
+    motorSet(Base_FL2,left_pwr);
+    motorSet(Base_FR,right_pwr);
+    motorSet(Base_FR2,right_pwr);
     motorSet(Base_BL,left_pwr);
     motorSet(Base_BR,right_pwr);
 };

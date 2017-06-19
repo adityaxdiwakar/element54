@@ -1,6 +1,6 @@
 #pragma once
 
-void SetDumper (signed char pwr);
-void CheckDumper ();
-void Dumper ();
-void Dumper_Record ();
+void SetArm (signed char pwr);
+void CheckArm ();
+void Arm ();
+void Arm_Record ();
