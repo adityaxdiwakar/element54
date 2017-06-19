@@ -3,18 +3,15 @@
 #include "MotorDef.h"
 
 // Claw Basic Set
-void SetClaw (signed char pwr)
+void SetClaw (signed char state)
 {
-    motorSet(ClawLeftMotor,-pwr);
-    motorSet(ClawRightMotor,pwr);
+  digitalWrite(12, state);
 };
-
 // Claw Step, Non-Recording
 void Claw ()
 {
-    if (joystickGetDigital(1,5,JOY_DOWN)) SetClaw(-127);
-    else if (joystickGetDigital(1,5,JOY_UP)) SetClaw(127);
-    else SetClaw(0);
+    if (joystickGetDigital(1,5,JOY_DOWN)) SetClaw(0);
+    else if (joystickGetDigital(1,5,JOY_UP)) SetClaw(1);
 };
 
 // Claw Step w/ Recording
