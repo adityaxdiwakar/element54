@@ -6,5 +6,5 @@ void Arm ();
 void Arm_Record ();
 
 extern int AvgArm;
-int scaler;
+int scaler = 0;
 int armloc_prev;
