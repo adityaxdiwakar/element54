@@ -6,11 +6,13 @@ Encoder enc2; //right
 
 #define Page_Num 50
 
-#define Arm_L0 4 // Power Exp
-#define Arm_R0 7 // Power Exp
+#define Arm_L0 3 // Power Exp
+#define Arm_R0 8 // Power Exp
 
-#define ClawLeftMotor 1
-#define ClawRightMotor 10
+#define ExtraMotorD 7
+#define ExtraMotorC 4
+#define ExtraMotorB 5
+#define ExtraMotorA 6
 
 #define BaseMotorTypeScale 392
 #define TorqueMotorEncoderScale 627.2

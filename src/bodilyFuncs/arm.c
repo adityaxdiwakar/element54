@@ -10,14 +10,27 @@ void SetArm (signed char pwr)
     motorSet(Arm_R0,pwr);
 };
 
-
+void GetArm () {
+    int LAM = motorGet(Arm_L0);
+    int RAM = motorGet(Arm_R0);
+    int LRAM = LAM + RAM;
+    int AvgArm = LRAM / 2;
+}
 
 // Arm Step, Non-Recording
 void Arm ()
 {
-    if (joystickGetDigital(1,6,JOY_UP)) SetArm(127);
-    if(joystickGetDigital(1,6,JOY_DOWN)) SetArm(-127);
-
+    if(joystickGetDigital(1,6,JOY_UP)) {
+        SetArm(127);
+        armloc_prev = 0;
+    }
+    if(joystickGetDigital(1,6,JOY_DOWN)) {
+        SetArm(-127);
+        armloc_prev = 0;
+    }
+    else {
+        if(scaler = 0) armloc_prev = analogRead(ArmPot); 
+    }
 };
 
 // Arm Step w/ Recording
