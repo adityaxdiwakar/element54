@@ -1,6 +1,6 @@
 #include "API.h"
 #include "drive.h"
-#include "claw.h"
+#include "intake.h"
 #include "arm.h"
 #include "recording.h"
 #include "JumperDef.h"
@@ -26,7 +26,8 @@ inline void OpCtrlStep ()
 {
     RenderBase();
     BaseApply();
-    Claw();
+    IntakeA();
+    IntakeB();
     Arm();
 
 }
@@ -43,7 +44,7 @@ inline void OpCtrlStep_Record ()
 {
     RenderBase();
     BaseApply_Record();
-    Claw_Record();
+    Intake_Record();
     Arm_Record();
 };
 void RobotOff ()
@@ -51,17 +52,20 @@ void RobotOff ()
     BaseClear();
     BaseApply();
     SetArm(0);
-    SetClaw(0);
+    SetIntakeA(0);
+    SetIntakeB(0);
 };
 extern volatile signed char LEFT_Prev,RIGHT_Prev;
 extern volatile signed char ArmPower_Prev;
-extern volatile signed char ClawPower_Prev;
+extern volatile signed char IntakePowerA_Prev;
+extern volatile signed char IntakePowerB_Prev;
 void ResetPrevs ()
 {
     LEFT_Prev = 0;
     RIGHT_Prev = 0;
     ArmPower_Prev = 0;
-    ClawPower_Prev = 0; // Claw starts open due to pre-auton.
+    IntakePowerB_Prev = 0;
+    IntakePowerA_Prev = 0;
 };
 volatile unsigned short FrameTime;
 Instruction* volatile instrptr;

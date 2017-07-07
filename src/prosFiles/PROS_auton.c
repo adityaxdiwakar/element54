@@ -11,9 +11,6 @@
  */
 
 #include "auton.h"
-#include "drive.h"
-#include "arm.h"
-#include "claw.h"
 #include "API.h"
 #include "MotorDef.h"
 #include "functions.h"

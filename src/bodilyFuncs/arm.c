@@ -2,6 +2,7 @@
 #include "MotorDef.h"
 #include "arm.h"
 #include "misc.h"
+#include "armvar.h"
 
 // Arm Basic Set
 void SetArm(signed char pwr) {
@@ -25,26 +26,12 @@ void Arm() {
   }
   if (joystickGetDigital(1, 6, JOY_DOWN)) {
     SetArm(-127);
-    armloc_prev = 0;
-  } else {
-    SetArm(20);
-    if (scaler == 0) {
-      armloc_prev = analogRead(ArmPot);
-      scaler++;
-    }
-    if(analogRead(ArmPot) < 50) {
+    armloc_prev = 0; }
+    else {
       SetArm(0);
-    }
-    else if(analogRead(ArmPot) < armloc_prev) {
-      SetArm(GetArm+1);
-    }
-    else if(analogRead(ArmPot) > armloc_prev) {
-      GetArm();
-      SetArm(GetArm-1);
     }
 
   }
-};
 
 // Arm Step w/ Recording
 #include "PreferredPronouns.h"
