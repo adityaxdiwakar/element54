@@ -1,48 +1,39 @@
+/******Motor Config*********
+Base Motors -
+ \ - Front Left (9)
+ / - Back Left (10)
+ \ - Front Right (2)
+ / - Back Right (1)
+Pincher - 6 (single motor)
+Mogo - 5 (Y-cable)
+Chainbar - 4 (Y-cable)
+Arm - 3 (Y-cable)
+******Motor Config*********/
+
+
 #pragma once
 #include <API.h>
+
+//Sensor Configuration
 Gyro gyro1;
-Encoder enc1; //left
-Encoder enc2; //right
+Encoder enc1;
+Encoder enc2;
 
-#define Page_Num 50
+//Base Motors
+#define Base_BR 1
+#define Base_FR 2
+#define Base_BL 10
+#define Base_FL 9
 
-#define Arm_L0 3 // Power Exp
-#define Arm_R0 8 // Power Exp
+//Y-Cables and Singles
+#define ArmY 3
+#define ChainY 4
+#define MobileY 5
+#define Pincher 6
 
-#define ExtraMotorD 7
-#define ExtraMotorC 4
-#define ExtraMotorB 5
-#define ExtraMotorA 6
-
+// Scaling Information
 #define BaseMotorTypeScale 392
 #define TorqueMotorEncoderScale 627.2
 
-#define Base_FL 1
-#define Base_FL2 2
-#define Base_BL 3
-#define Base_FR 10
-#define Base_FR2 9
-#define Base_BR 8
-
-//Sensors (Digital)
-#define DownBumpP 12
-#define BackLeftBUM 11
-#define BackBump 10
-#define BackRightBUM 9
-#define Jumper //8
-#define LeftTopENC 6
-#define LeftBotENC 7
-#define RightTopENC 4
-#define RightBotENC 5
-#define Jumper //4
-#define Jumper
-#define Jumper
-#define void_port
-
-//Sensors (Analog)
-#define AutoPot 1
-#define ArmPot 2
-#define GYR 3
-#define LeftLIN 4
-#define RightLIN 5
-#define ClawPot 6
+//Global Vars
+#define Page_Num 50

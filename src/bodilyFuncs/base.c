@@ -4,12 +4,10 @@ volatile float LEFT,RIGHT;
 
 void SetBase(signed char pwr)
 {
-  motorSet(Base_FL, pwr);
-  motorSet(Base_FL2, pwr);
-  motorSet(Base_BL, pwr);
-  motorSet(Base_BR, pwr);
-  motorSet(Base_FR, pwr);
-  motorSet(Base_FR2, pwr);
+  motorSet(Base_BR, pwr); //backright
+  motorSet(Base_FR, pwr); //frontright
+  motorSet(Base_BL, pwr); //backleft
+  motorSet(Base_FL, pwr); //frontleft
 }; //not used in program
 
 void BaseClear ()
@@ -19,8 +17,8 @@ void BaseClear ()
 };
 void BaseRotate (float pwr)
 {
-    LEFT -= pwr;
-    RIGHT -= pwr;
+    LEFT += pwr;
+    RIGHT += pwr;
 };
 void BaseForward (float pwr)
 {
@@ -43,12 +41,10 @@ void BaseApply ()
     Norm(RIGHT);
     left_pwr = LEFT * 127.5f;
     right_pwr = RIGHT * 127.5f;
-    motorSet(Base_FL,left_pwr);
-    motorSet(Base_FL2,left_pwr);
-    motorSet(Base_FR,right_pwr);
-    motorSet(Base_FR2,right_pwr);
-    motorSet(Base_BL,left_pwr);
-    motorSet(Base_BR,right_pwr);
+    motorSet(Base_BR,-left_pwr);
+    motorSet(Base_FR,left_pwr);
+    motorSet(Base_BL,-right_pwr);
+    motorSet(Base_FL,right_pwr);
 };
 
 #include "recording.h"

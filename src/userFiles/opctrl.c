@@ -1,12 +1,13 @@
 #include "API.h"
 #include "drive.h"
 #include "intake.h"
+#include "chainbar.h"
+#include "pincher.h"
 #include "arm.h"
 #include "recording.h"
 #include "JumperDef.h"
 #include "MotorDef.h"
 #include "PreferredPronouns.h"
-#include "functions.h"
 const float Inv255 = 1 / 127.f;
 inline void RenderBase ()
 {
@@ -26,10 +27,10 @@ inline void OpCtrlStep ()
 {
     RenderBase();
     BaseApply();
-    IntakeA();
-    IntakeB();
     Arm();
-
+    Chain();
+    IntakeA();
+    Pinch();
 }
 void OpCtrl ()
 {
@@ -46,6 +47,8 @@ inline void OpCtrlStep_Record ()
     BaseApply_Record();
     Intake_Record();
     Arm_Record();
+    Chain_Record();
+    Pinch_Record();
 };
 void RobotOff ()
 {
@@ -53,18 +56,17 @@ void RobotOff ()
     BaseApply();
     SetArm(0);
     SetIntakeA(0);
-    SetIntakeB(0);
+    SetChain(0);
+    SetPincher(0);
 };
 extern volatile signed char LEFT_Prev,RIGHT_Prev;
 extern volatile signed char ArmPower_Prev;
 extern volatile signed char IntakePowerA_Prev;
-extern volatile signed char IntakePowerB_Prev;
 void ResetPrevs ()
 {
     LEFT_Prev = 0;
     RIGHT_Prev = 0;
     ArmPower_Prev = 0;
-    IntakePowerB_Prev = 0;
     IntakePowerA_Prev = 0;
 };
 volatile unsigned short FrameTime;

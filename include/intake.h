@@ -1,7 +1,5 @@
 #pragma once
 
-void SetIntakeA (signed char state);
-void SetIntakeB (signed char state);
+void SetIntakeA (signed char pwr);
 void IntakeA ();
-void IntakeB ();
 void Intake_Record ();

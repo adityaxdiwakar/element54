@@ -13,7 +13,6 @@
 #include "auton.h"
 #include "API.h"
 #include "MotorDef.h"
-#include "functions.h"
 
 /*
  * Runs the user autonomous code. This function will be started in its own task with the default

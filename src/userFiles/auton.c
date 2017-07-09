@@ -4,8 +4,11 @@
 #include "PreferredPronouns.h"
 #include "arm.h"
 #include "intake.h"
+#include "chainbar.h"
+#include "pincher.h"
 #include "misc.h"
 #include "recording.h"
+
 char filename_buf[4];
 char *GenFileName(unsigned short *duration) {
   if (digitalRead(Jumper_SkillsOrAuton)) {
@@ -45,6 +48,7 @@ void ErrorMultiBlinkInf(unsigned char nblinks) {
     wait(500);
   };
 };
+
 void FollowInstructions() {
   unsigned short Duration;
   char *filename = GenFileName(&Duration);
@@ -94,12 +98,10 @@ void FollowInstructions() {
     {
     case Label_BaseLEFT:
       motorSet(Base_FL, power);
-      motorSet(Base_FR, power);
       motorSet(Base_BL, power);
       break;
     case Label_BaseRIGHT:
       motorSet(Base_FR, power);
-      motorSet(Base_FR2, power);
       motorSet(Base_BR, power);
       break;
     case Label_Arm:
@@ -108,8 +110,12 @@ void FollowInstructions() {
     case Label_IntakeA:
       SetIntakeA(power);
       break;
-    case Label_IntakeB:
-      SetIntakeB(power);
+    case Label_Pinch:
+      SetPincher(power);
+      break;
+    case Label_Chain:
+      SetChain(power);
+      break;
     };
     instrptr++;
   };
