@@ -47,9 +47,6 @@
 
 void operatorControl() {
   // ErrorBlinkInfinite();
-  if (digitalRead(1)) {
-    OpCtrl_Record();
-  } else
     OpCtrl();
 
   // DO NOT END THIS FUNCTION!!

@@ -5,16 +5,19 @@
 #include "misc.h"
 
 // Arm Basic Set
-void SetArm(signed char pwr) { motorSet(ArmY, pwr); };
+void SetArm(signed char pwr) {
+  motorSet(ArmL, pwr);
+  motorSet(ArmR, pwr);
+ }
 
 // Arm Step, Non-Recording
 void Arm() {
-  if (joystickGetDigital(1, 6, JOY_UP))
-    SetArm(127);
-  if (joystickGetDigital(1, 6, JOY_DOWN))
-    SetArm(-127);
-  else
-    SetArm(0);
+  if (joystickGetDigital(1, 6, JOY_UP)) {
+    SetArm(127); }
+  else if (joystickGetDigital(1,6,JOY_DOWN)) {
+    SetArm(-127); }
+  else {
+    SetArm(0); }
 }
 
 // Arm Step w/ Recording
@@ -25,7 +28,7 @@ void Arm_Record() {
   signed char ArmPower;
   if (joystickGetDigital(1, 6, JOY_UP)) {
     ArmPower = 127;}
-  if (joystickGetDigital(1, 6, JOY_DOWN)) {
+  else if (joystickGetDigital(1, 6, JOY_DOWN)) {
     ArmPower = -127; }
   else {
     ArmPower = 0; }

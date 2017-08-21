@@ -26,10 +26,11 @@ Encoder enc2;
 #define Base_FL 9
 
 //Y-Cables and Singles
-#define ArmY 3
-#define ChainY 4
-#define MobileY 5
-#define Pincher 6
+#define ArmL 5
+#define ArmR 6
+#define ChainY 7
+#define MobileY 4
+#define Pincher 8
 
 // Scaling Information
 #define BaseMotorTypeScale 392
