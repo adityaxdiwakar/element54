@@ -19,6 +19,10 @@ Gyro gyro1;
 Encoder enc1;
 Encoder enc2;
 
+#define ArmPot 1
+//2210 max
+//515 min
+
 //Base Motors
 #define Base_BR 1
 #define Base_FR 2

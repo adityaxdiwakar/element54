@@ -1,4 +1,4 @@
-#include "API.H"
+#include "API.h"
 #include "MotorDef.h"
 #include "arm.h"
 #include "armvar.h"
@@ -10,6 +10,24 @@ void SetArm(signed char pwr) {
   motorSet(ArmR, pwr);
  }
 
+void PID() {
+  bool top;
+  bool bot;
+  if(analogRead(ArmPot) < 615) {
+    bot = true;
+    top = false;
+  }
+  else {
+    top = true;
+    bot = false;
+  }
+  if(top) {
+    SetArm(15);
+  }
+  if(bot) {
+    SetArm(-15);
+  }
+}
 // Arm Step, Non-Recording
 void Arm() {
   if (joystickGetDigital(1, 6, JOY_UP)) {
@@ -17,7 +35,8 @@ void Arm() {
   else if (joystickGetDigital(1,6,JOY_DOWN)) {
     SetArm(-127); }
   else {
-    SetArm(0); }
+    SetArm(0);
+    PID(); }
 }
 
 // Arm Step w/ Recording
