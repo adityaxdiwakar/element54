@@ -5,7 +5,8 @@ ROOT=.
 # Binary output directory
 BINDIR=$(ROOT)/bin
 # Subdirectories to include in the build
-SUBDIRS=src src/bodilyFuncs src/prosFiles src/userFiles src/Functions src/Functions/auto src/Functions/indv
+SUBDIRS=src
+
 # Nothing below here needs to be modified by typical users
 
 # Include common aspects of this project
