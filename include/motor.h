@@ -7,22 +7,25 @@
 /**
  * Motor names
  */
-#define ARM_L1     1
-#define ARM_L2     2
-#define ARM_L3     3
-#define CHASSIS_L1 4
-#define CHASSIS_L2 5
-#define CHASSIS_R2 6
-#define CHASSIS_R1 7
-#define ARM_R3     8
-#define ARM_R2     9
-#define ARM_R1     10
+
+#define CHASSIS_R2 1
+#define CHASSIS_R1 2
+//not used = 3
+#define MOGO_LR1   4
+#define ARM_L1     5
+#define ARM_R1     6
+#define CHAIN_LR1  7
+#define PINCH_LR1  8
+#define CHASSIS_L1 9
+#define CHASSIS_L2 10
 
 /**
  * Sensor used for motors
  */
 #define ARM_SENSOR 1
-
+#define CHAIN_SENSOR 2
+#define PINCHER_POT 3
+#define MOGO_SENSOR 4
 /**
  * Struct for motor seutp
  *
@@ -84,7 +87,7 @@ void setMotor(unsigned char eMotor, int iSpeed);
  *
  * @return	Motor speed to each chassis motor
  */
-void tank(int iSpeedL, int iSpeedR);
+void tank(int power, int turn);
 
 /**
  * Sets the motor speed to arm
@@ -95,6 +98,8 @@ void tank(int iSpeedL, int iSpeedR);
  */
 void arm(int iSpeed);
 
+void chain(int iSpeed);
+
 /**
  * PID for Arm
  *
@@ -103,6 +108,8 @@ void arm(int iSpeed);
  * @return	Motor speed to get to desired value
  */
 int iArmPID(int iDes);
+
+int iChainPID(int cDes);
 
 /* end of header guard */
 #endif

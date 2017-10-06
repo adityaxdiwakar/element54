@@ -90,13 +90,13 @@ setMotor( unsigned char iPort, int iSpeed ) {
  *
  * @return	Motor speed to each chassis motor
  */
- 
+
 void
-tank( int iSpeedL, int iSpeedR ) {
-  setMotor(CHASSIS_L1, iSpeedL);
-  setMotor(CHASSIS_L2, iSpeedL);
-  setMotor(CHASSIS_R2, iSpeedR);
-  setMotor(CHASSIS_R1, iSpeedR);
+tank( int power, int turn ) {
+  setMotor(CHASSIS_L1, -power - turn);
+  setMotor(CHASSIS_L2, power + turn);
+  setMotor(CHASSIS_R2, power - turn);
+  setMotor(CHASSIS_R1, -power + turn);
 }
 
 /**
@@ -109,13 +109,13 @@ tank( int iSpeedL, int iSpeedR ) {
 void
 arm( int iSpeed ) {
   setMotor(ARM_L1, iSpeed);
-  setMotor(ARM_L2, iSpeed);
-  setMotor(ARM_L3, iSpeed);
-  setMotor(ARM_R3, iSpeed);
-  setMotor(ARM_R2, iSpeed);
   setMotor(ARM_R1, iSpeed);
 }
 
+void
+chain( int iSpeed) {
+  setMotor(CHAIN_LR1, iSpeed);
+}
 
 /**
  * PID for Arm
@@ -124,6 +124,19 @@ arm( int iSpeed ) {
  *
  * @return	Motor speed to get to desired value
  */
+
+pid sChainPID;
+int
+iChainPID( int cDes ) {
+	sChainPID.kP         = 0.05;
+  sChainPID.kD         = 0.05;
+	sChainPID.current    = analogReadCalibrated( CHAIN_SENSOR );
+	sChainPID.error      = cDes - sChainPID.current;
+	sChainPID.derivative = sChainPID.error - sChainPID.lastError;
+  sChainPID.lastError  = sChainPID.error;
+	return ( (sChainPID.error * sChainPID.kP) + (sChainPID.derivative * sChainPID.kD) );
+}
+
 pid sArmPID;
 int
 iArmPID( int iDes ) {
