@@ -125,24 +125,12 @@ chain( int iSpeed) {
  * @return	Motor speed to get to desired value
  */
 
-pid sChainPID;
-int
-iChainPID( int cDes ) {
-	sChainPID.kP         = 0.05;
-  sChainPID.kD         = 0.05;
-	sChainPID.current    = analogReadCalibrated( CHAIN_SENSOR );
-	sChainPID.error      = cDes - sChainPID.current;
-	sChainPID.derivative = sChainPID.error - sChainPID.lastError;
-  sChainPID.lastError  = sChainPID.error;
-	return ( (sChainPID.error * sChainPID.kP) + (sChainPID.derivative * sChainPID.kD) );
-}
-
 pid sArmPID;
 int
 iArmPID( int iDes ) {
 	sArmPID.kP         = 0.2;
   sArmPID.kD         = 0.1;
-	sArmPID.current    = analogReadCalibrated( ARM_SENSOR );
+	sArmPID.current    = analogRead( ARM_SENSOR );
 	sArmPID.error      = iDes - sArmPID.current;
 	sArmPID.derivative = sArmPID.error - sArmPID.lastError;
   sArmPID.lastError  = sArmPID.error;

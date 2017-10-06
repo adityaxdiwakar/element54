@@ -15,6 +15,4 @@ initializeIO( ) {
 
 void
 initialize() {
-  analogCalibrate(ARM_SENSOR);
-  analogCalibrate(CHAIN_SENSOR);
 }
