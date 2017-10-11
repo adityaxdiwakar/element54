@@ -15,4 +15,7 @@ initializeIO( ) {
 
 void
 initialize() {
+  ENC_LEFT = encoderInit(ENC_LT, ENC_LB, true);
+  ENC_RIGHT = encoderInit(ENC_RT, ENC_RB, true);
+  GYRO_LR1 = gyroInit(GYRO, 0);
 }

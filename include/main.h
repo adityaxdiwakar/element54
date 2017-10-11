@@ -61,6 +61,15 @@ extern "C" {
 #define clipNum(iInput, iHigh, iLow) iInput <= iLow ? iLow : (iInput >= iHigh ? iHigh : iInput)
 #define sgn(iInput) iInput == 0 ? 0 : (iInput > 0 ? 1 : -1)
 
+typedef struct {
+  int id;
+} auton;
+
+auton cone_on_pole;
+
+void coneAutonLeft();
+void mogoAuton();
+
 /**
  * Runs the user autonomous code. This function will be started in its own task with the default
  * priority and stack size whenever the robot is enabled via the Field Management System or the

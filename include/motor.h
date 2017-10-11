@@ -8,9 +8,8 @@
  * Motor names
  */
 
-#define CHASSIS_R2 1
+#define CHASSIS_R2 3
 #define CHASSIS_R1 2
-//not used = 3
 #define MOGO_LR1   4
 #define ARM_L1     5
 #define ARM_R1     6
@@ -22,10 +21,29 @@
 /**
  * Sensor used for motors
  */
-#define ARM_SENSOR 1
+
+ //analog
+#define ARM_SENSOR   1
 #define CHAIN_SENSOR 2
-#define PINCHER_POT 3
-#define MOGO_SENSOR 4
+#define MOGO_SENSOR  3
+#define PINCHER_POT  4
+#define GYRO         5
+
+//digital
+#define ENC_RT 1
+#define ENC_RB 2
+#define ENC_LB 3
+#define ENC_LT 4
+
+/**
+* Typedef for certain sensors
+*/
+
+Encoder ENC_LEFT;
+Encoder ENC_RIGHT;
+
+Gyro GYRO_LR1;
+
 /**
  * Struct for motor seutp
  *
@@ -77,6 +95,7 @@ void setupMotor(unsigned char eMotor, bool bIsReversed, bool bIsTruespeed);
  *
  * @return	Motor set to desired speed
  */
+
 void setMotor(unsigned char eMotor, int iSpeed);
 
 /**
@@ -87,7 +106,34 @@ void setMotor(unsigned char eMotor, int iSpeed);
  *
  * @return	Motor speed to each chassis motor
  */
+
+int state1;
+int state2;
+int state3;
+
 void tank(int power, int turn);
+
+void driveForward();
+void posSetMogo(void *mogoPos);
+void driveRight();
+void mobileGoal(int iSpeed);
+void driveBackward();
+void driveStop();
+void driveLeft();
+void pincher(int iSpeed);
+void posPIDBaseBWD(void *basePID_pos);
+void posPIDBaseFWD(void *basePID_pos);
+void beginning_coneAuton(int armPos, int basePos);
+void posSetArm(void *armPos);
+void posSetBase(void *basePos);
+void openPincher();
+void driveCustom(int custom);
+void mogoHoldDown();
+void posSetTurn(void *turnRad);
+void driveCustomHort();
+void driveLeftPivot();
+void posSetChain(void *chainPos);
+void testTurn();
 
 /**
  * Sets the motor speed to arm
@@ -110,6 +156,10 @@ void chain(int iSpeed);
 int iArmPID(int iDes);
 
 int iChainPID(int cDes);
+
+int iDrivePID(int target);
+
+int iRotatePID(int target);
 
 /* end of header guard */
 #endif

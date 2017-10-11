@@ -19,7 +19,7 @@ void armControl(bool bBtnUp, bool bBtnDown) {
   } else if (analogRead(ARM_SENSOR) < 650) {
     iOutput = -15;
   } else {
-    iOutput = iArmPID(iArmDes);
+    iOutput = 15;
   }
   arm(iOutput);
 }
@@ -27,7 +27,7 @@ void armControl(bool bBtnUp, bool bBtnDown) {
 int cChainDes, chainOutput;
 void chainControl(bool bBtnUp, bool bBtnDown) {
   if (bBtnUp || bBtnDown) {
-    chainOutput = bBtnUp ? -127 : (bBtnDown ? 127 : 0);
+    chainOutput = bBtnUp ? 127 : (bBtnDown ? -127 : 0);
     cChainDes = analogReadCalibrated(ARM_SENSOR);
   } else
     chainOutput = 0;
@@ -41,18 +41,18 @@ void chainControl(bool bBtnUp, bool bBtnDown) {
 
 int coneOutput;
 void coneIntakeControl() {
-  if (joystickGetDigital(1, 7, JOY_UP))
+  if (joystickGetDigital(1, 7, JOY_LEFT))
     coneOutput = 127;
   else if (joystickGetDigital(1, 7, JOY_DOWN))
     coneOutput = -127;
   else
     coneOutput = 0;
-  setMotor(PINCH_LR1, coneOutput);
+  motorSet(PINCH_LR1, coneOutput);
 }
 
 int mogoOutput;
 void mogoIntakeControl() {
-  if (joystickGetDigital(1, 7, JOY_LEFT))
+  if (joystickGetDigital(1, 7, JOY_UP))
     mogoOutput = 127;
   else if (joystickGetDigital(1, 7, JOY_RIGHT))
     mogoOutput = -127;
@@ -73,9 +73,23 @@ void operatorControl() {
                  joystickGetDigital(1, 5, JOY_DOWN));
     delay(20);
     lcdSetBacklight(uart1, true);
-    lcdPrint(uart1, 1, "Chain is %d", analogReadCalibrated(CHAIN_SENSOR));
-    if (joystickGetDigital(1, 8, JOY_UP))
-      analogCalibrate(CHAIN_SENSOR);
+    lcdPrint(uart1, 1, "L:%d M:%d", encoderGet(ENC_LEFT), analogRead(MOGO_SENSOR));
+		lcdPrint(uart1, 2, "A:%d G:%d", analogRead(ARM_SENSOR), analogRead(MOGO_SENSOR))/*gyroGet(GYRO_LR1))*/;
+    if (joystickGetDigital(1, 8, JOY_RIGHT)) {
+      encoderReset(ENC_LEFT); encoderReset(ENC_RIGHT); gyroReset(GYRO_LR1);
+    }
+    if(joystickGetDigital(1, 8, JOY_UP)) {
+      mogoAuton();
+    }
+    if (joystickGetDigital(1, 8, JOY_LEFT)) {
+      //mogoAuton();
+      while(true) {
+        driveLeftPivot();
+        if(joystickGetDigital(1, 8, JOY_DOWN)) {
+          break;
+        }
+      }
+    }
   }
   taskDelete(coneTaskHandle);
   taskDelete(mogoTaskHandle);

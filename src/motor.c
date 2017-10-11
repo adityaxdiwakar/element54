@@ -117,6 +117,16 @@ chain( int iSpeed) {
   setMotor(CHAIN_LR1, iSpeed);
 }
 
+void
+pincher( int iSpeed) {
+  setMotor(PINCH_LR1, iSpeed);
+}
+
+void
+mobileGoal(int iSpeed) {
+  setMotor(MOGO_LR1, iSpeed);
+}
+
 /**
  * PID for Arm
  *
@@ -135,4 +145,27 @@ iArmPID( int iDes ) {
 	sArmPID.derivative = sArmPID.error - sArmPID.lastError;
   sArmPID.lastError  = sArmPID.error;
 	return ( (sArmPID.error * sArmPID.kP) + (sArmPID.derivative * sArmPID.kD) );
+}
+
+pid sDriveFwd;
+int
+iDrivePID( int target ) {
+  sDriveFwd.kP = .27;
+  sDriveFwd.kD = 1;
+  sDriveFwd.current = encoderGet(ENC_LEFT);
+  sDriveFwd.error = target - sDriveFwd.current;
+  sDriveFwd.derivative = sDriveFwd.error - sDriveFwd.lastError;
+  sDriveFwd.lastError = sDriveFwd.error;
+  return ( (sDriveFwd.error * sDriveFwd.kP) + (sDriveFwd.derivative *sDriveFwd.kD) );
+}
+
+pid sRotate;
+int iRotatePID( int target) {
+  sRotate.kP = 3;
+  sRotate.kD = 1.7;
+  sRotate.current = gyroGet(GYRO_LR1);
+  sRotate.error = target - sRotate.current;
+  sRotate.derivative = sRotate.error - sRotate.lastError;
+  sRotate.lastError = sRotate.error;
+  return ( (sRotate.error * sRotate.kP) + (sRotate.derivative * sRotate.kD) + (35 * (sRotate.error / abs(sRotate.error) ) ) );
 }
