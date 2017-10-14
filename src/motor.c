@@ -156,7 +156,7 @@ iDrivePID( int target ) {
   sDriveFwd.error = target - sDriveFwd.current;
   sDriveFwd.derivative = sDriveFwd.error - sDriveFwd.lastError;
   sDriveFwd.lastError = sDriveFwd.error;
-  return ( (sDriveFwd.error * sDriveFwd.kP) + (sDriveFwd.derivative *sDriveFwd.kD) );
+  return ( (sDriveFwd.error * sDriveFwd.kP) + (sDriveFwd.derivative *sDriveFwd.kD) + (35 * (sDriveFwd.error / abs(sDriveFwd.error) ) ) );
 }
 
 pid sRotate;

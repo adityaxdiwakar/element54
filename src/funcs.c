@@ -1,5 +1,13 @@
 #include <main.h>
 
+
+inline void driveCustom(int speed) {
+    setMotor(CHASSIS_L1, -speed);
+    setMotor(CHASSIS_L2, speed);
+    setMotor(CHASSIS_R2, speed);
+    setMotor(CHASSIS_R1, -speed);
+}
+
 inline void driveCustomVert(int custom) {
   motorSet(CHASSIS_L1, custom);
   motorSet(CHASSIS_L2, -custom);
@@ -70,7 +78,7 @@ void posSetArm(void *armPos) {
   }
 }*/
 
-/*void posSetTurn(void *turnRad) {
+void posSetTurn(void *turnRad) {
   int radTurn = (int)turnRad;
   while (true) {
   int iOutput = iRotatePID(radTurn);
@@ -78,13 +86,11 @@ void posSetArm(void *armPos) {
     driveCustomHort(iOutput);
   } else if (gyroGet(GYRO_LR1) < radTurn - 1) {
     driveCustomHort(iOutput);
-  } else
-    break;
+  }
   delay(15);
 }
-  chain(0);
-  taskDelete(NULL);
-}*/
+  driveStop();
+}
 
 void posSetChain(void *chainPos) {
   int posChain = (int)chainPos;
@@ -167,6 +173,23 @@ void posPIDBaseBWD(void *basePID_pos) {
   }
 }
 
+void posSetBaseSlow(void *basePos) {
+  if (encoderGet(ENC_LEFT) > (int)basePos) {
+    while (encoderGet(ENC_LEFT) > (int)basePos) {
+      driveBackward();
+    }
+    driveStop();
+    taskDelete(NULL);
+  }
+  if (encoderGet(ENC_LEFT) < (int)basePos) {
+    while (encoderGet(ENC_LEFT) < (int)basePos) {
+      driveCustom(70);
+    }
+    driveStop();
+    taskDelete(NULL);
+  }
+}
+
 void openPincher() {
   pincher(-127);
 }
@@ -176,13 +199,24 @@ void beginning_coneAuton(int armPos, int basePos) {
                                   (void *)armPos, TASK_PRIORITY_DEFAULT);
   while (analogRead(ARM_SENSOR) < 1200)
     delay(15);
-  TaskHandle baseMove = taskCreate(posSetBase, TASK_DEFAULT_STACK_SIZE,
+  TaskHandle baseMove = taskCreate(posSetBaseSlow, TASK_DEFAULT_STACK_SIZE,
                                    (void *)basePos, TASK_PRIORITY_DEFAULT);
-  while (analogRead(ARM_SENSOR) < 1360 && encoderGet(ENC_LEFT) < 190) {
+  while (analogRead(ARM_SENSOR) < armPos && encoderGet(ENC_LEFT) < basePos) {
     delay(15);
   }
 }
 
 void mogoHoldDown() {
   mobileGoal(127);
+}
+
+void slowDriveForward() {
+  setMotor(CHASSIS_L1, -63);
+  setMotor(CHASSIS_L2, 63);
+  setMotor(CHASSIS_R2, 63);
+  setMotor(CHASSIS_R1, -63);
+}
+
+void getMogo() {
+  mobileGoal(-127);
 }

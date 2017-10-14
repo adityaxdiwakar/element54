@@ -74,20 +74,19 @@ void operatorControl() {
     delay(20);
     lcdSetBacklight(uart1, true);
     lcdPrint(uart1, 1, "L:%d M:%d", encoderGet(ENC_LEFT), analogRead(MOGO_SENSOR));
-		lcdPrint(uart1, 2, "A:%d G:%d", analogRead(ARM_SENSOR), analogRead(MOGO_SENSOR))/*gyroGet(GYRO_LR1))*/;
+    lcdPrint(uart1, 2, "Batt: %1.3f V", (double)powerLevelMain() / 1000);
     if (joystickGetDigital(1, 8, JOY_RIGHT)) {
       encoderReset(ENC_LEFT); encoderReset(ENC_RIGHT); gyroReset(GYRO_LR1);
     }
-    if(joystickGetDigital(1, 8, JOY_UP)) {
-      mogoAuton();
-    }
-    if (joystickGetDigital(1, 8, JOY_LEFT)) {
-      //mogoAuton();
-      while(true) {
-        driveLeftPivot();
-        if(joystickGetDigital(1, 8, JOY_DOWN)) {
-          break;
-        }
+    if(joystickGetDigital(1,8,JOY_LEFT)) {
+      if(joystickGetDigital(1, 8, JOY_UP)) {
+        mogoAutonBlue();
+      }
+      if (joystickGetDigital(1, 8, JOY_RIGHT)) {
+        mogoAutonRed();
+      }
+      if(joystickGetDigital(1,8,JOY_DOWN)) {
+        coneAutonLeft();
       }
     }
   }

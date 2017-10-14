@@ -8,7 +8,7 @@
  * Motor names
  */
 
-#define CHASSIS_R2 3
+#define CHASSIS_R2 1
 #define CHASSIS_R1 2
 #define MOGO_LR1   4
 #define ARM_L1     5
@@ -28,6 +28,7 @@
 #define MOGO_SENSOR  3
 #define PINCHER_POT  4
 #define GYRO         5
+#define AUTO_POT     6
 
 //digital
 #define ENC_RT 1
@@ -122,6 +123,8 @@ void driveStop();
 void driveLeft();
 void pincher(int iSpeed);
 void posPIDBaseBWD(void *basePID_pos);
+void driveCustom(int speed);
+void posSetBaseSlow(void* basePos);
 void posPIDBaseFWD(void *basePID_pos);
 void beginning_coneAuton(int armPos, int basePos);
 void posSetArm(void *armPos);
@@ -134,6 +137,8 @@ void driveCustomHort();
 void driveLeftPivot();
 void posSetChain(void *chainPos);
 void testTurn();
+void getMogo();
+void slowDriveForward();
 
 /**
  * Sets the motor speed to arm
