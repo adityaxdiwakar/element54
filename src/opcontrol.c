@@ -52,12 +52,16 @@ void coneIntakeControl() {
 
 int mogoOutput;
 void mogoIntakeControl() {
-  if (joystickGetDigital(1, 7, JOY_UP))
-    mogoOutput = 127;
-  else if (joystickGetDigital(1, 7, JOY_RIGHT))
-    mogoOutput = -127;
-  else
-    mogoOutput = 0;
+  if(joystickGetDigital(1,7,JOY_UP) || joystickGetDigital(1,7,JOY_RIGHT)) {
+    if (joystickGetDigital(1, 7, JOY_UP))
+      mogoOutput = 127;
+    else if (joystickGetDigital(1, 7, JOY_RIGHT))
+      mogoOutput = -127;
+  }
+  else if (analogRead(MOGO_SENSOR) > 2000) {
+    mogoOutput = 30;
+  }
+  else mogoOutput = 0;
   setMotor(MOGO_LR1, mogoOutput);
 }
 
