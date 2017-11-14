@@ -8,15 +8,16 @@
  * Motor names
  */
 
-#define CHASSIS_R2 1
-#define CHASSIS_R1 2
-#define MOGO_LR1   4
+#define CHASSIS_R2 8
+#define CHASSIS_R1 9
+#define MOGO_L1    1
+#define MOGO_R1    10
 #define ARM_L1     5
 #define ARM_R1     6
 #define CHAIN_LR1  7
-#define PINCH_LR1  8
-#define CHASSIS_L1 9
-#define CHASSIS_L2 10
+#define ROLL_LR1   4
+#define CHASSIS_L1 2
+#define CHASSIS_L2 3
 
 /**
  * Sensor used for motors
@@ -24,25 +25,20 @@
 
  //analog
 #define ARM_SENSOR   1
-#define CHAIN_SENSOR 2
+#define BAR_SENSOR   2
 #define MOGO_SENSOR  3
-#define PINCHER_POT  4
-#define GYRO         5
-#define AUTO_POT     6
+#define GYRO         4
+#define AUTO_SENSOR  5
 
 //digital
-#define ENC_RT 1
-#define ENC_RB 2
-#define ENC_LB 3
-#define ENC_LT 4
+#define ENC_RT 12
+#define ENC_RB 11
 
 /**
 * Typedef for certain sensors
 */
 
-Encoder ENC_LEFT;
 Encoder ENC_RIGHT;
-
 Gyro GYRO_LR1;
 
 /**
@@ -76,6 +72,7 @@ typedef struct {
 	float derivative;
 	float lastError;
 } pid;
+
 
 /**
  * Used for motor setup
@@ -112,33 +109,12 @@ int state1;
 int state2;
 int state3;
 
-void tank(int power, int turn);
+void tank(int power, int turn), driveSpeed(int power), driveTurn(int power), driveForward_task(void *basePos);
+void driveBackward_task(void *basePos);
 
-void driveForward();
-void posSetMogo(void *mogoPos);
-void driveRight();
-void mobileGoal(int iSpeed);
-void driveBackward();
-void driveStop();
-void driveLeft();
-void pincher(int iSpeed);
-void posPIDBaseBWD(void *basePID_pos);
-void driveCustom(int speed);
-void posSetBaseSlow(void* basePos);
-void posPIDBaseFWD(void *basePID_pos);
-void beginning_coneAuton(int armPos, int basePos);
-void posSetArm(void *armPos);
-void posSetBase(void *basePos);
-void openPincher();
-void driveCustom(int custom);
-void mogoHoldDown();
-void posSetTurn(void *turnRad);
-void driveCustomHort();
-void driveLeftPivot();
-void posSetChain(void *chainPos);
-void testTurn();
-void getMogo();
-void slowDriveForward();
+void driveTo(void *basePos), driveForward(), driveBackward(), driveLeft(), driveRight();
+
+void driveToPID(void *basePos), rotateToPID(void *gyroPos);
 
 /**
  * Sets the motor speed to arm
@@ -147,9 +123,15 @@ void slowDriveForward();
  *
  * @return	Motor speed to each arm motor
  */
-void arm(int iSpeed);
+void arm(int iSpeed), armTo(void *armPos), armUp(void *armPos);
 
-void chain(int iSpeed);
+void chain(int iSpeed), bar(int iSpeed), barTo(void *barPos), barDown(void *barPos);
+
+void mogo(int iSpeed), mogoDown_task(void *mogoPos);
+
+void rollerPID(), rollerIN(), rollerOUT();
+
+void stackCones(void *parameter);
 
 /**
  * PID for Arm

@@ -113,18 +113,14 @@ arm( int iSpeed ) {
 }
 
 void
-chain( int iSpeed) {
+bar( int iSpeed ) {
   setMotor(CHAIN_LR1, iSpeed);
 }
 
 void
-pincher( int iSpeed) {
-  setMotor(PINCH_LR1, iSpeed);
-}
-
-void
-mobileGoal(int iSpeed) {
-  setMotor(MOGO_LR1, iSpeed);
+mogo(int iSpeed) {
+  setMotor(MOGO_L1, iSpeed);
+  setMotor(MOGO_R1, iSpeed);
 }
 
 /**
@@ -138,8 +134,8 @@ mobileGoal(int iSpeed) {
 pid sArmPID;
 int
 iArmPID( int iDes ) {
-	sArmPID.kP         = 0.2;
-  sArmPID.kD         = 0.1;
+	sArmPID.kP         = 1;
+  sArmPID.kD         = 1;
 	sArmPID.current    = analogRead( ARM_SENSOR );
 	sArmPID.error      = iDes - sArmPID.current;
 	sArmPID.derivative = sArmPID.error - sArmPID.lastError;
@@ -150,19 +146,19 @@ iArmPID( int iDes ) {
 pid sDriveFwd;
 int
 iDrivePID( int target ) {
-  sDriveFwd.kP = .27;
+  sDriveFwd.kP = .2;
   sDriveFwd.kD = 1;
-  sDriveFwd.current = encoderGet(ENC_LEFT);
+  sDriveFwd.current = encoderGet(ENC_RIGHT);
   sDriveFwd.error = target - sDriveFwd.current;
   sDriveFwd.derivative = sDriveFwd.error - sDriveFwd.lastError;
   sDriveFwd.lastError = sDriveFwd.error;
-  return ( (sDriveFwd.error * sDriveFwd.kP) + (sDriveFwd.derivative *sDriveFwd.kD) + (35 * (sDriveFwd.error / abs(sDriveFwd.error) ) ) );
+  return ( (sDriveFwd.error * sDriveFwd.kP) + (sDriveFwd.derivative *sDriveFwd.kD) + (15 * (sDriveFwd.error / abs(sDriveFwd.error) ) ) );
 }
 
 pid sRotate;
 int iRotatePID( int target) {
-  sRotate.kP = 3;
-  sRotate.kD = 1.7;
+  sRotate.kP = 2.5;
+  sRotate.kD = 1;
   sRotate.current = gyroGet(GYRO_LR1);
   sRotate.error = target - sRotate.current;
   sRotate.derivative = sRotate.error - sRotate.lastError;

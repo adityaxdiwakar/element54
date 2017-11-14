@@ -1,222 +1,252 @@
-#include <main.h>
+#include "main.h"
 
+/**
+ * Drive Program to change direction and speed
+ **/
 
-inline void driveCustom(int speed) {
-    setMotor(CHASSIS_L1, -speed);
-    setMotor(CHASSIS_L2, speed);
-    setMotor(CHASSIS_R2, speed);
-    setMotor(CHASSIS_R1, -speed);
+void driveSpeed(int power) {
+    setMotor(CHASSIS_L1, -power);
+    setMotor(CHASSIS_L2, power);
+    setMotor(CHASSIS_R2, power);
+    setMotor(CHASSIS_R1, -power);
 }
 
-inline void driveCustomVert(int custom) {
-  motorSet(CHASSIS_L1, custom);
-  motorSet(CHASSIS_L2, -custom);
-  motorSet(CHASSIS_R2, custom);
-  motorSet(CHASSIS_R1, -custom);
+/**
+* Default to turn right w/ 127
+**/
+
+void driveTurn(int power) {
+    setMotor(CHASSIS_L1, -power);
+    setMotor(CHASSIS_L2, power);
+    setMotor(CHASSIS_R2, -power);
+    setMotor(CHASSIS_R1, power);
 }
 
-inline void driveCustomHort(int custom) {
-  setMotor(CHASSIS_L1, custom);
-  setMotor(CHASSIS_L2, -custom);
-  setMotor(CHASSIS_R2, custom);
-  setMotor(CHASSIS_R1, -custom);
+void driveForward() {
+  driveSpeed(127);
 }
 
-inline void driveForward() {
-  setMotor(CHASSIS_L1, -127);
-  setMotor(CHASSIS_L2, 127);
-  setMotor(CHASSIS_R2, 127);
-  setMotor(CHASSIS_R1, -127);
+void driveBackward() {
+  driveSpeed(-127);
 }
 
-inline void driveBackward() {
-  setMotor(CHASSIS_L1, 127);
-  setMotor(CHASSIS_L2, -127);
-  setMotor(CHASSIS_R2, -127);
-  setMotor(CHASSIS_R1, 127);
+void driveLeft() {
+  driveTurn(-127);
 }
 
-inline void driveLeft() {
-  setMotor(CHASSIS_L1, 127);
-  setMotor(CHASSIS_L2, -127);
-  setMotor(CHASSIS_R2, 127);
-  setMotor(CHASSIS_R1, -127);
-}
+/**
+ * Arm Program to calculate current position and modify
+ * values to get to new position using while loops
+ **/
 
-inline void driveRight() {
-  setMotor(CHASSIS_L1, -127);
-  setMotor(CHASSIS_L2, 127);
-  setMotor(CHASSIS_R2, -127);
-  setMotor(CHASSIS_R1, 127);
-}
-
-inline void driveStop() {
-  setMotor(CHASSIS_L1, 0);
-  setMotor(CHASSIS_L2, 0);
-  setMotor(CHASSIS_R2, 0);
-  setMotor(CHASSIS_R1, 0);
-}
-
-void driveLeftPivot() {
-  setMotor(CHASSIS_L1, 127);
-  setMotor(CHASSIS_L2, -127);
-}
-
-/*
-void posSetArm(void *armPos) {
-  if (analogRead(ARM_SENSOR) > *(int *)armPos) {
-    while (analogRead(ARM_SENSOR) > *(int *)armPos) {
-      arm(-127); }
-    arm(0);
-    taskDelete(NULL);
-  }
-  if (analogRead(ARM_SENSOR) < *(int *)armPos) {
-    while (analogRead(ARM_SENSOR) < *(int *)armPos) {
-      arm(127); }
-    arm(0);
-    taskDelete(NULL);
-  }
-}*/
-
-void posSetTurn(void *turnRad) {
-  int radTurn = (int)turnRad;
-  while (true) {
-  int iOutput = iRotatePID(radTurn);
-  if (gyroGet(GYRO_LR1) > radTurn + 1) {
-    driveCustomHort(iOutput);
-  } else if (gyroGet(GYRO_LR1) < radTurn - 1) {
-    driveCustomHort(iOutput);
-  }
-  delay(15);
-}
-  driveStop();
-}
-
-void posSetChain(void *chainPos) {
-  int posChain = (int)chainPos;
-  while (true) {
-    if (analogRead(CHAIN_SENSOR) > posChain + 50) {
-      chain(-127);
-    } else if (analogRead(CHAIN_SENSOR) < posChain - 50) {
-      chain(127);
-    } else
-      break;
-    delay(15);
-  }
-  chain(0);
-  taskDelete(NULL);
-}
-
-void posSetMogo(void *mogoPos) {
-  int posMogo = (int)mogoPos;
-  while (true) {
-    if (analogRead(MOGO_SENSOR) > posMogo + 50) {
-      mobileGoal(-127);
-    } else if (analogRead(MOGO_SENSOR) < posMogo - 50) {
-      mobileGoal(127);
-    } else
-      break;
-    delay(15);
-  }
-  mobileGoal(0);
-  taskDelete(NULL);
-}
-
-void posSetArm(void *armPos) {
-  int posArm = (int)armPos;
-  while (true) {
-    if (analogRead(ARM_SENSOR) > posArm + 50) {
-      arm(-127);
-    } else if (analogRead(ARM_SENSOR) < posArm - 50) {
+void armTo(void *armPos) {
+  int target = (int)armPos;
+  int current = analogRead(ARM_SENSOR);
+  while(target > current || target < current) {
+    int current = analogRead(ARM_SENSOR);
+    if(current < target - 5) {
       arm(127);
-    } else
-      break;
-    delay(15);
+    }
+    if(current > target + 5) {
+      arm(-127);
+    }
+    else {
+      arm(0);
+    }
   }
   arm(0);
-  taskDelete(NULL);
 }
 
-void posSetBase(void *basePos) {
-  if (encoderGet(ENC_LEFT) > (int)basePos) {
-    while (encoderGet(ENC_LEFT) > (int)basePos) {
-      driveBackward();
+void armUp(void *armPos) {
+  int target = (int)armPos;
+  int current = analogRead(ARM_SENSOR);
+  while(current < target) {
+    if(current < target) {
+      delay(5);
+  }
+    else {
+      arm(0);
     }
-    driveStop();
-    taskDelete(NULL);
+}
+}
+
+void barDown(void *barPos) {
+  int target = (int)barPos;
+  int current = analogRead(BAR_SENSOR);
+  while(current < target) {
+    if(current < target) {
+      delay(5);
   }
-  if (encoderGet(ENC_LEFT) < (int)basePos) {
-    while (encoderGet(ENC_LEFT) < (int)basePos) {
-      driveForward();
+    else {
+      bar(0);
     }
-    driveStop();
-    taskDelete(NULL);
-  }
+}
 }
 
-void posPIDBaseFWD(void *basePID_pos) {
-  while (true) {
-    int driveOutput = iDrivePID((int)basePID_pos);
-    driveCustomVert(driveOutput);
-    delay(20);
-    if (encoderGet(ENC_LEFT) >= (int)basePID_pos) break; }
-  driveStop();
-  taskDelete(NULL);
-}
+/**
+ * Bar Program to calculate current position and modify
+ * values to get to a new position using while loops
+ **/
 
-void posPIDBaseBWD(void *basePID_pos) {
-  while(true) {
-    int driveOutput = iDrivePID((int) basePID_pos);
-    driveCustomVert(driveOutput);
-    delay(20);
-    if(encoderGet(ENC_LEFT) <= (int)basePID_pos) break;
-  }
-}
-
-void posSetBaseSlow(void *basePos) {
-  if (encoderGet(ENC_LEFT) > (int)basePos) {
-    while (encoderGet(ENC_LEFT) > (int)basePos) {
-      driveBackward();
+void barTo(void *barPos) {
+  int start = 0;
+  int target = (int)barPos;
+  int current = analogRead(BAR_SENSOR);
+  while((target > current + 5 || target < current -5) && start == 0 && isEnabled()) {
+    int current = analogRead(BAR_SENSOR);
+    if(target > current + 5) {
+      bar(-127);
     }
-    driveStop();
-    taskDelete(NULL);
-  }
-  if (encoderGet(ENC_LEFT) < (int)basePos) {
-    while (encoderGet(ENC_LEFT) < (int)basePos) {
-      driveCustom(70);
+    if(target < current - 5) {
+      bar(127);
     }
-    driveStop();
-    taskDelete(NULL);
+    else {
+      bar(0);
+      start = 1;
+    }
   }
 }
 
-void openPincher() {
-  pincher(-127);
+/**
+ * Roller functions found below
+ **/
+
+ void rollerIN() {
+  setMotor(ROLL_LR1, -127);
+ }
+
+ void rollerOUT() {
+   setMotor(ROLL_LR1, 127);
+ }
+
+void rollerPID() {
+  setMotor(ROLL_LR1, -20);
 }
 
-void beginning_coneAuton(int armPos, int basePos) {
-  TaskHandle armMove = taskCreate(posSetArm, TASK_DEFAULT_STACK_SIZE,
-                                  (void *)armPos, TASK_PRIORITY_DEFAULT);
-  while (analogRead(ARM_SENSOR) < 1200)
+/**
+ * Simple program designed to start the robot with the
+ * roller intake in the intake position during autonomous controls
+ * Insert this in the front of most controls and continue to test
+ * with random weights and batteries
+ **/
+
+void startupSequence() {
+    TaskHandle pidRoller_1 = taskRunLoop(rollerPID, 50);
+    wait(100);
+    int barPos = 400;
+    TaskHandle moveBar_1 = taskCreate(barTo, TASK_DEFAULT_STACK_SIZE, (void*)barPos, TASK_PRIORITY_DEFAULT);
+    while(analogRead(BAR_SENSOR) > 400) {
+      delay(10);
+    }
+    bar(0);
+    taskDelete(moveBar_1);
+}
+
+/**
+ * Based on values, going backward is negative and positive is forward
+ **/
+
+void
+driveTo(void* basePos) {
+  int target = (int)basePos;
+  int current = encoderGet(ENC_RIGHT);
+  while(current < target - 5 || current > target + 5) {
+    if(current < target) {
+      driveSpeed(127);
+    }
+    if(current > target) {
+      driveSpeed(-127);
+    }
+    else driveSpeed(0);
+  }
+  driveSpeed(0);
+}
+
+void
+driveToPID(void* basePos) {
+  while(isEnabled()) {
+    driveSpeed(iDrivePID((int)basePos));
+  }
+}
+
+void
+rotateToPID(void* gyroPos) {
+  while(isEnabled()) {
+    int value = iRotatePID((int)gyroPos);
+    driveTurn(-value);
+  }
+}
+
+void
+driveForward_task(void *basePos) {
+  int target = (int)basePos;
+  int current = encoderGet(ENC_RIGHT);
+  while(current < target) {
+    if(current < target) {
+      delay(5);
+  }
+    else {
+      driveSpeed(0);
+    }
+}
+}
+
+void
+driveBackward_task(void *basePos) {
+  int target = (int)basePos;
+  int current = encoderGet(ENC_RIGHT);
+  while(current > target) {
+    if(current > target) {
+      delay(5);
+  }
+    else {
+      driveSpeed(0);
+    }
+}
+}
+
+
+void
+mogoDown_task(void *mogoPos) {
+  int target = (int)mogoPos;
+  int current = analogRead(MOGO_SENSOR);
+  while(current < target) {
+    if(current < target) {
+      delay(5);
+    }
+    else {
+      mogo(0);
+    }
+  }
+}
+
+void pickUp() {
+  rollerIN();
+  wait(250);
+  arm(-127);
+  while(analogRead(ARM_SENSOR) > 1700) {
+    setMotor(ROLL_LR1, -127);
     delay(15);
-  TaskHandle baseMove = taskCreate(posSetBaseSlow, TASK_DEFAULT_STACK_SIZE,
-                                   (void *)basePos, TASK_PRIORITY_DEFAULT);
-  while (analogRead(ARM_SENSOR) < armPos && encoderGet(ENC_LEFT) < basePos) {
+  }
+  arm(0); wait(100); rollerPID();
+}
+
+void
+stackCones(void *parameter) {
+  int ducahkay = (int)parameter;
+  pickUp();
+  bar(-127);
+  while(analogRead(BAR_SENSOR) < 1900) {
     delay(15);
   }
-}
-
-void mogoHoldDown() {
-  mobileGoal(127);
-}
-
-void slowDriveForward() {
-  setMotor(CHASSIS_L1, -63);
-  setMotor(CHASSIS_L2, 63);
-  setMotor(CHASSIS_R2, 63);
-  setMotor(CHASSIS_R1, -63);
-}
-
-void getMogo() {
-  mobileGoal(-127);
+  bar(-20);
+  arm(-127);
+  while(analogRead(ARM_SENSOR) > 1200) {
+    delay(15);
+    setMotor(ROLL_LR1, 127);
+  }
+  arm(0);
+  setMotor(ROLL_LR1, 127);
+  wait(500);
+  setMotor(ROLL_LR1, 0);
 }
