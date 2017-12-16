@@ -29,7 +29,7 @@ void chainControl(bool bBtnUp, bool bBtnDown) {
     cChainDes = analogReadCalibrated(ARM_SENSOR);
   }
   else if (analogRead(BAR_SENSOR) > 500) chainOutput = -15;
-  else chainOutput = 0;
+  else chainOutput = 15;
   setMotor(CHAIN_LR1, chainOutput);
 }
 
