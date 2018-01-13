@@ -31,8 +31,8 @@
 #define AUTO_SENSOR  5
 
 //digital
-#define ENC_RT 12
-#define ENC_RB 11
+#define ENC_RT 2
+#define ENC_RB 1
 
 /**
 * Typedef for certain sensors
@@ -66,8 +66,10 @@ typedef struct _motor{
 typedef struct {
 	float current;
 	float kP;
+	float kI;
 	float kD;
 	float target;
+	float integral;
 	float error;
 	float derivative;
 	float lastError;
@@ -123,15 +125,15 @@ void driveToPID(void *basePos), rotateToPID(void *gyroPos);
  *
  * @return	Motor speed to each arm motor
  */
-void arm(int iSpeed), armTo(void *armPos), armUp(void *armPos);
+void arm(int iSpeed), armTo(void *armPos), armUp(void *armPos), armDown(void *armPos);
 
 void chain(int iSpeed), bar(int iSpeed), barTo(void *barPos), barDown(void *barPos);
 
 void mogo(int iSpeed), mogoDown_task(void *mogoPos);
 
-void rollerPID(), rollerIN(), rollerOUT();
+void rollerPID(), rollerIN(), rollerOUT(), moveRoller(int iSpeed);
 
-void stackCones(void *parameter);
+void stackSingleCone(void*parameter);
 
 /**
  * PID for Arm

@@ -70,11 +70,19 @@ void operatorControl() {
   TaskHandle coneTaskHandle = taskRunLoop(coneIntakeControl, 50);
   TaskHandle mogoTaskHandle = taskRunLoop(mogoIntakeControl, 50);
   while (isEnabled()) {
+    printf("%d \n", analogRead(ARM_SENSOR));
     delay(20);
     tank(joystickGetAnalog(1, 2), joystickGetAnalog(1, 1));
     armControl(joystickGetDigital(1, 6, JOY_UP), joystickGetDigital(1, 6, JOY_DOWN));
     chainControl(joystickGetDigital(1, 5, JOY_UP), joystickGetDigital(1, 5, JOY_DOWN));
-    lcdSetBacklight(uart1, true);
+    if(joystickGetDigital(1, 8, JOY_RIGHT)) {
+      taskSuspend(coneTaskHandle);
+      taskSuspend(mogoTaskHandle);
+      autonomous();
+      taskResume(mogoTaskHandle);
+      taskResume(coneTaskHandle);
+    }
+    lcdPrint(uart1, 1, "%d \n", analogRead(BAR_SENSOR));
   }
   taskDelete(mogoTaskHandle);
   taskDelete(coneTaskHandle);

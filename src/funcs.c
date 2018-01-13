@@ -70,6 +70,12 @@ void armUp(void *armPos) {
 }
 }
 
+void armDown(void *armPos) {
+  while(true) {
+    arm(-127);
+  }
+}
+
 void barDown(void *barPos) {
   int target = (int)barPos;
   int current = analogRead(BAR_SENSOR);
@@ -123,6 +129,9 @@ void rollerPID() {
   setMotor(ROLL_LR1, -20);
 }
 
+void moveRoller(int iSpeed) {
+  setMotor(ROLL_LR1, -iSpeed);
+}
 /**
  * Simple program designed to start the robot with the
  * roller intake in the intake position during autonomous controls
@@ -231,22 +240,84 @@ void pickUp() {
   arm(0); wait(100); rollerPID();
 }
 
-void
-stackCones(void *parameter) {
-  int ducahkay = (int)parameter;
-  pickUp();
-  bar(-127);
-  while(analogRead(BAR_SENSOR) < 1900) {
-    delay(15);
-  }
-  bar(-20);
-  arm(-127);
-  while(analogRead(ARM_SENSOR) > 1200) {
-    delay(15);
-    setMotor(ROLL_LR1, 127);
+
+void stackCones() {
+  int heights[10] = {1460, 1525, 1625, 1700, 1775, 1850, 1925, 2000, 2075, 2150};
+  rollerIN();
+  while(analogRead(ARM_SENSOR) > heights[0]) {
+    arm(-127); }
+  wait(500);
+  arm(0);
+  wait(150);
+  wait(500);
+  bar(0);  
+  rollerOUT();
+  wait(333);
+
+  wait(1000);
+
+  while(analogRead(BAR_SENSOR) > 400) {
+    bar(127); }
+  rollerIN();
+  wait(333);
+  bar(0);
+  while(analogRead(ARM_SENSOR) < heights[1]) {
+    arm(127);
   }
   arm(0);
-  setMotor(ROLL_LR1, 127);
+  wait(150);
+  bar(-127);
   wait(500);
-  setMotor(ROLL_LR1, 0);
-}
+  bar(0);  
+  rollerOUT();
+  wait(333);
+
+  wait(1000);
+
+  while(analogRead(BAR_SENSOR) > 400) {
+    bar(127); }
+  rollerIN();
+  wait(333);
+  bar(0);
+  rollerIN(); 
+  while(analogRead(ARM_SENSOR) > heights[0]) {
+    arm(-127); }
+  bar(127);
+  wait(500);
+  arm(0);//
+  wait(150);
+  while(analogRead(ARM_SENSOR) < heights[2]) {
+    arm(127); }
+  arm(0);
+  wait(150);
+  bar(-127);
+  wait(500);
+  bar(0);  
+  rollerOUT();
+  wait(333); 
+
+  wait(1000);
+
+   while(analogRead(BAR_SENSOR) > 400) {
+    bar(127); }
+  rollerIN();
+  wait(333);
+  bar(0);
+  rollerIN(); 
+  while(analogRead(ARM_SENSOR) > heights[0]) {
+    arm(-127); }
+  bar(127);
+  wait(500);
+  arm(0);//
+  wait(150);
+  while(analogRead(ARM_SENSOR) < heights[3]) {
+    arm(127); } 
+  arm(0);
+  wait(150);
+  bar(-127);
+  wait(500);
+  bar(0);  
+  rollerOUT();
+  wait(333);
+  
+  }
