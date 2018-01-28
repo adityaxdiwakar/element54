@@ -149,6 +149,7 @@ int iChainPID(int cDes);
 int iDrivePID(int target);
 
 int iRotatePID(int target);
+pid sRotate;
 
 /* end of header guard */
 #endif

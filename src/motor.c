@@ -155,10 +155,9 @@ iDrivePID( int target ) {
   return ( (sDriveFwd.error * sDriveFwd.kP) + (sDriveFwd.derivative *sDriveFwd.kD) + (15 * (sDriveFwd.error / abs(sDriveFwd.error) ) ) );
 }
 
-pid sRotate;
 int iRotatePID( int target) {
-  sRotate.kP = 3;
-  sRotate.kD = 1;
+  sRotate.kP = 10;
+  sRotate.kD = 7.5;
   sRotate.kI = 0;
   sRotate.current = gyroGet(GYRO_LR1);
   sRotate.error = target - sRotate.current;
