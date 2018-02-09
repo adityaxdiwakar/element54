@@ -112,10 +112,8 @@ int state1;
 int state2;
 int state3;
 
-void tank(int power, int turn), driveSpeed(int power), driveTurn(int power), driveForward_task(void *basePos);
-void driveBackward_task(void *basePos);
-
-void driveTo(void *basePos), driveForward(), driveBackward(), driveLeft(), driveRight();
+void tank(int power, int turn), driveSpeed(int power), driveTurn(int power);
+void driveTo(void *basePos), driveForward(), driveBackward();
 
 void driveToPID(void *basePos), rotateToPID(void *gyroPos);
 
@@ -126,15 +124,14 @@ void driveToPID(void *basePos), rotateToPID(void *gyroPos);
  *
  * @return	Motor speed to each arm motor
  */
+
 void arm(int iSpeed), armTo(void *armPos), armUp(void *armPos), armDown(void *armPos);
 
 void chain(int iSpeed), bar(int iSpeed), barTo(void *barPos), barDown(void *barPos);
 
-void mogo(int iSpeed), mogoDown_task(void *mogoPos);
+void mogo(int iSpeed);
 
 void rollerPID(), rollerIN(), rollerOUT(), moveRoller(int iSpeed);
-
-void stackSingleCone(void*parameter);
 
 /**
  * PID for Arm
@@ -143,6 +140,7 @@ void stackSingleCone(void*parameter);
  *
  * @return	Motor speed to get to desired value
  */
+
 int iArmPID(int iDes);
 
 int iChainPID(int cDes);
@@ -150,6 +148,7 @@ int iChainPID(int cDes);
 int iDrivePID(int target);
 
 int iRotatePID(int target);
+
 pid sRotate;
 
 /* end of header guard */
