@@ -156,13 +156,13 @@ iDrivePID( int target ) {
 }
 
 int iRotatePID( int target) {
-  sRotate.kP = 10;
-  sRotate.kD = 7.5;
+  sRotate.kP = 5;
+  sRotate.kD = 7;
   sRotate.kI = 0;
   sRotate.current = gyroGet(GYRO_LR1);
   sRotate.error = target - sRotate.current;
   sRotate.integral += sRotate.error;  
   sRotate.derivative = sRotate.error - sRotate.lastError;
   sRotate.lastError = sRotate.error;
-  return ( (sRotate.error * sRotate.kP) + (sRotate.derivative * sRotate.kD) + (sRotate.integral * sRotate.kI) );
+  return ( (sRotate.error * sRotate.kP)+ (sRotate.derivative * sRotate.kD) + (sRotate.integral * sRotate.kI) + 15 *(sRotate.error/(abs(sRotate.error))));
 }

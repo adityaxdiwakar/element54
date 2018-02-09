@@ -27,8 +27,9 @@
 #define ARM_SENSOR   1
 #define BAR_SENSOR   2
 #define MOGO_SENSOR  3
-#define GYRO         4
-#define AUTO_SENSOR  5
+#define AUTO_SENSOR  4 /*
+#define NOTHING      5 */
+#define GYRO         6
 
 //digital
 #define ENC_RT 2

@@ -12,12 +12,13 @@
  */
 
 int iArmDes, iOutput;
-void armControl(bool bBtnUp, bool bBtnDown)
+void armControl(bool bBtnUp, bool bBtnDown, bool bBtn2Up, bool bBtn2Down)
 {
-  if (bBtnUp || bBtnDown)
+  if (bBtnUp || bBtnDown || bBtn2Up || bBtn2Down)
   {
-    iOutput = bBtnUp ? 127 : (bBtnDown ? -127 : 0);
-    iArmDes = analogRead(ARM_SENSOR);
+    if(bBtnUp || bBtn2Up) iOutput = 127;
+    else if(bBtnDown || bBtn2Down) iOutput = -127;
+    else iOutput = 0;
   }
   else if (analogRead(ARM_SENSOR) < 1500)
     iOutput = -20;
@@ -27,12 +28,13 @@ void armControl(bool bBtnUp, bool bBtnDown)
 }
 
 int cChainDes, chainOutput;
-void chainControl(bool bBtnUp, bool bBtnDown)
+void chainControl(bool bBtnUp, bool bBtnDown, bool bBtn2Up, bool bBtn2Down)
 {
-  if (bBtnUp || bBtnDown)
+  if (bBtnUp || bBtnDown || bBtn2Up || bBtn2Down)
   {
-    chainOutput = bBtnUp ? -127 : (bBtnDown ? 127 : 0);
-    cChainDes = analogReadCalibrated(ARM_SENSOR);
+    if(bBtnUp || bBtn2Up) chainOutput = -127;
+    else if(bBtnDown || bBtn2Down) chainOutput = 127;
+    else chainOutput = 0;
   }
   else if (analogRead(BAR_SENSOR) > 30)
     chainOutput = -15;
@@ -52,20 +54,20 @@ void coneIntakeControl()
 {
   while (isEnabled())
   {
-    if (joystickGetDigital(1, 7, JOY_DOWN))
+    if (joystickGetDigital(1, 7, JOY_DOWN) || joystickGetDigital(2,7,JOY_DOWN))
     {
       setMotor(ROLL_LR1, 127);
       for (int i = 0; i < 25; i++)
       {
         setMotor(ROLL_LR1, 127);
         delay(10);
-  if (joystickGetDigital(1, 7, JOY_LEFT))
+  if (joystickGetDigital(1, 7, JOY_LEFT) || joystickGetDigital(2,7,JOY_LEFT))
         {
           i = 101;
         }
       }
     }
-    else if (joystickGetDigital(1, 7, JOY_LEFT))
+    else if (joystickGetDigital(1, 7, JOY_LEFT) || joystickGetDigital(2,7,JOY_LEFT))
     {
     coneOutput = -127;
     }
@@ -82,14 +84,16 @@ void coneIntakeControl()
 int mogoOutput;
 void mogoIntakeControl()
 {
-  if (joystickGetDigital(1, 7, JOY_UP) || joystickGetDigital(1, 7, JOY_RIGHT))
+  if (joystickGetDigital(1, 7, JOY_UP) || joystickGetDigital(1, 7, JOY_RIGHT) || joystickGetDigital(2, 7, JOY_UP) || joystickGetDigital(2, 7, JOY_RIGHT))
   {
-    if (joystickGetDigital(1, 7, JOY_UP))
+    if (joystickGetDigital(1, 7, JOY_UP) || joystickGetDigital(2, 7, JOY_UP))
       mogoOutput = 127;
-    else if (joystickGetDigital(1, 7, JOY_RIGHT))
+    else if (joystickGetDigital(1, 7, JOY_RIGHT) || joystickGetDigital(2, 7, JOY_RIGHT))
       mogoOutput = -127;
   }
-  else
+  else if(analogRead(MOGO_SENSOR) > 3000) 
+    mogoOutput = 30;
+  else 
     mogoOutput = 0;
   setMotor(MOGO_L1, mogoOutput);
   setMotor(MOGO_R1, mogoOutput);
@@ -130,16 +134,16 @@ void operatorControl()
   while (isEnabled())
   {
     delay(20);
-    tank(joystickGetAnalog(1, 2), joystickGetAnalog(1, 1));
-    armControl(joystickGetDigital(1, 6, JOY_UP), joystickGetDigital(1, 6, JOY_DOWN));
-    chainControl(joystickGetDigital(1, 5, JOY_UP), joystickGetDigital(1, 5, JOY_DOWN));
+    tank(joystickGetAnalog(1, 2) + joystickGetAnalog(2,2), joystickGetAnalog(1, 1) + joystickGetAnalog(2, 1));
+    armControl(joystickGetDigital(1, 6, JOY_UP), joystickGetDigital(1, 6, JOY_DOWN), joystickGetDigital(2,6,JOY_UP), joystickGetDigital(2,6,JOY_DOWN));
+    chainControl(joystickGetDigital(1, 5, JOY_UP), joystickGetDigital(1, 5, JOY_DOWN), joystickGetDigital(2,5,JOY_UP), joystickGetDigital(2,5,JOY_DOWN));
     if (joystickGetDigital(1, 8, JOY_RIGHT))
     {
-      taskSuspend(mogoTaskHandle);
       taskSuspend(coneTaskHandle);
+      taskSuspend(mogoTaskHandle);
       autonomous();
-      taskResume(mogoTaskHandle);
       taskResume(coneTaskHandle);
+      taskResume(mogoTaskHandle);
     }
   }
   taskDelete(mogoTaskHandle);
