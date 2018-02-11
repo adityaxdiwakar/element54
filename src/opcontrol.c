@@ -127,25 +127,19 @@ void baseHold()
 
 void operatorControl()
 {
-  lcdInit(uart1);
   encoderReset(ENC_RIGHT);
 	TaskHandle coneTaskHandle = taskCreate(coneIntakeControl, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
-  TaskHandle mogoTaskHandle = taskRunLoop(mogoIntakeControl, 50);
+  /* TaskHandle lcdTaskHandle = taskCreate(lcdCounter, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+  */ TaskHandle mogoTaskHandle = taskRunLoop(mogoIntakeControl, 50);
   while (isEnabled())
   {
+    lcdSetText(uart2, 1, "UR MOM GEY");
     delay(20);
     tank(joystickGetAnalog(1, 2) + joystickGetAnalog(2,2), joystickGetAnalog(1, 1) + joystickGetAnalog(2, 1));
     armControl(joystickGetDigital(1, 6, JOY_UP), joystickGetDigital(1, 6, JOY_DOWN), joystickGetDigital(2,6,JOY_UP), joystickGetDigital(2,6,JOY_DOWN));
     chainControl(joystickGetDigital(1, 5, JOY_UP), joystickGetDigital(1, 5, JOY_DOWN), joystickGetDigital(2,5,JOY_UP), joystickGetDigital(2,5,JOY_DOWN));
-    if (joystickGetDigital(1, 8, JOY_RIGHT))
-    {
-      taskSuspend(coneTaskHandle);
-      taskSuspend(mogoTaskHandle);
-      autonomous();
-      taskResume(coneTaskHandle);
-      taskResume(mogoTaskHandle);
-    }
   }
   taskDelete(mogoTaskHandle);
   taskDelete(coneTaskHandle);
+  /* taskDelete(lcdTaskHandle); */
 }

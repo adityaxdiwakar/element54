@@ -18,5 +18,4 @@ void
 initialize() {
   ENC_RIGHT = encoderInit(ENC_RT, ENC_RB, true);
   GYRO_LR1 = gyroInit(GYRO, 0);
-  lcdInit(uart1);
 }

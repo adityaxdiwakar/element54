@@ -72,6 +72,7 @@ int helpme;
 
 void stackCones();
 void startOneCone(), startupSequence(), mogoRed();
+void lcdCounter();
 
 /**
  * Runs the user autonomous code. This function will be started in its own task with the default
