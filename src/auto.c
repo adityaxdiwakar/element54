@@ -8,7 +8,8 @@
  * To be paired with the mogoAutonSlave
  */
 inline void
-mogoAutonMaster(int coneCount) {
+mogoAutonMaster(int coneCount)
+{
   gyroReset(GYRO_LR1);
   encoderReset(ENC_RIGHT);
   int armPos = 2000;
@@ -17,21 +18,27 @@ mogoAutonMaster(int coneCount) {
   int barPos = 350;
   int runCone = 0;
   arm(127);
-  TaskHandle barMove_1 = taskCreate(barDown, TASK_DEFAULT_STACK_SIZE, (void * ) barPos, TASK_PRIORITY_DEFAULT);
-  TaskHandle armMove_1 = taskCreate(armUp, TASK_DEFAULT_STACK_SIZE, (void * ) armPos, TASK_PRIORITY_DEFAULT);
-  while (analogRead(ARM_SENSOR) < armPos - 500) {
+  TaskHandle barMove_1 = taskCreate(barDown, TASK_DEFAULT_STACK_SIZE, (void *)barPos, TASK_PRIORITY_DEFAULT);
+  TaskHandle armMove_1 = taskCreate(armUp, TASK_DEFAULT_STACK_SIZE, (void *)armPos, TASK_PRIORITY_DEFAULT);
+  while (analogRead(ARM_SENSOR) < armPos - 500)
+  {
     delay(15);
   }
   mogo(127);
   driveSpeed(127);
-  while (analogRead(MOGO_SENSOR) < mogoPos || analogRead(ARM_SENSOR) < armPos || encoderGet(ENC_RIGHT) < drivePos - 200) {
+  while (analogRead(MOGO_SENSOR) < mogoPos || analogRead(ARM_SENSOR) < armPos || encoderGet(ENC_RIGHT) < drivePos - 200)
+  {
     delay(15);
-    if (analogRead(MOGO_SENSOR) > mogoPos) mogo(30);
-    if (analogRead(ARM_SENSOR) > armPos) arm(0);
-    if (encoderGet(ENC_RIGHT) > drivePos - 200) driveSpeed(0);
+    if (analogRead(MOGO_SENSOR) > mogoPos)
+      mogo(30);
+    if (analogRead(ARM_SENSOR) > armPos)
+      arm(0);
+    if (encoderGet(ENC_RIGHT) > drivePos - 200)
+      driveSpeed(0);
   }
   driveSpeed(127);
-  while (encoderGet(ENC_RIGHT) < drivePos) {
+  while (encoderGet(ENC_RIGHT) < drivePos)
+  {
     delay(15);
   }
   driveSpeed(0);
@@ -41,7 +48,8 @@ mogoAutonMaster(int coneCount) {
   drivePos = -1100;
   bar(127);
   mogo(-127);
-  while (analogRead(MOGO_SENSOR) > 1700) {
+  while (analogRead(MOGO_SENSOR) > 1700)
+  {
     delay(15);
     mogo(-127);
   }
@@ -54,19 +62,24 @@ mogoAutonMaster(int coneCount) {
   setMotor(ROLL_LR1, -63);
   taskDelete(barMove_1);
   taskDelete(armMove_1);
-  TaskHandle armMove_2 = taskCreate(armDown, TASK_DEFAULT_STACK_SIZE, (void * ) armPos, TASK_PRIORITY_DEFAULT);
+  TaskHandle armMove_2 = taskCreate(armDown, TASK_DEFAULT_STACK_SIZE, (void *)armPos, TASK_PRIORITY_DEFAULT);
   int current = 2000;
-  while (current > armPos) {
+  while (current > armPos)
+  {
     delay(15);
     arm(-127);
-    if (analogRead(ARM_SENSOR) < 1000) {
+    if (analogRead(ARM_SENSOR) < 1000)
+    {
       current = current;
-    } else {
+    }
+    else
+    {
       current = analogRead(ARM_SENSOR);
     }
   }
   taskDelete(armMove_2);
-  if (coneCount == 2) {
+  if (coneCount == 2)
+  {
     arm(0);
     bar(0);
     wait(100);
@@ -95,13 +108,16 @@ mogoAutonMaster(int coneCount) {
     wait(150);
     arm(0);
   }
-  TaskHandle basePID_1 = taskCreate(driveToPID, TASK_DEFAULT_STACK_SIZE, (void * ) drivePos, TASK_PRIORITY_DEFAULT);
-  while (encoderGet(ENC_RIGHT) > drivePos || runCone == 0) {
+  TaskHandle basePID_1 = taskCreate(driveToPID, TASK_DEFAULT_STACK_SIZE, (void *)drivePos, TASK_PRIORITY_DEFAULT);
+  while (encoderGet(ENC_RIGHT) > drivePos || runCone == 0)
+  {
     delay(15);
-    if (runCone == 0) {
+    if (runCone == 0)
+    {
       int armCurr = analogRead(ARM_SENSOR);
       arm(127);
-      while (analogRead(ARM_SENSOR) < armCurr + 125) delay(15);
+      while (analogRead(ARM_SENSOR) < armCurr + 125)
+        delay(15);
       arm(0);
       bar(-127);
       wait(750);
@@ -128,15 +144,21 @@ mogoAutonMaster(int coneCount) {
  * 1 = Blue; -1 = Red (for 20pt)
  */
 inline void
-mogoAutonSlave(int direction) {
+mogoAutonSlave(int direction)
+{
   int gyroPos = direction * 135;
-  TaskHandle basePID_2 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void * ) gyroPos, TASK_PRIORITY_DEFAULT);
-  if (direction == 1) {
-    while (gyroGet(GYRO_LR1) < gyroPos) {
+  TaskHandle basePID_2 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void *)gyroPos, TASK_PRIORITY_DEFAULT);
+  if (direction == 1)
+  {
+    while (gyroGet(GYRO_LR1) < gyroPos)
+    {
       delay(15);
     }
-  } else {
-    while (gyroGet(GYRO_LR1) > gyroPos) {
+  }
+  else
+  {
+    while (gyroGet(GYRO_LR1) > gyroPos)
+    {
       delay(15);
     }
   }
@@ -146,8 +168,9 @@ mogoAutonSlave(int direction) {
   wait(250);
   int drivePos = 500;
   encoderReset(ENC_RIGHT);
-  TaskHandle basePID_3 = taskCreate(driveToPID, TASK_DEFAULT_STACK_SIZE, (void * ) drivePos, TASK_PRIORITY_DEFAULT);
-  while (encoderGet(ENC_RIGHT) < drivePos) {
+  TaskHandle basePID_3 = taskCreate(driveToPID, TASK_DEFAULT_STACK_SIZE, (void *)drivePos, TASK_PRIORITY_DEFAULT);
+  while (encoderGet(ENC_RIGHT) < drivePos)
+  {
     delay(15);
   }
   wait(150);
@@ -155,13 +178,18 @@ mogoAutonSlave(int direction) {
   driveSpeed(0);
   wait(250);
   gyroPos = direction * 225;
-  TaskHandle basePID_4 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void * ) gyroPos, TASK_PRIORITY_DEFAULT);
-  if (direction == 1) {
-    while (gyroGet(GYRO_LR1) < gyroPos) {
+  TaskHandle basePID_4 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void *)gyroPos, TASK_PRIORITY_DEFAULT);
+  if (direction == 1)
+  {
+    while (gyroGet(GYRO_LR1) < gyroPos)
+    {
       delay(15);
     }
-  } else {
-    while (gyroGet(GYRO_LR1) > gyroPos) {
+  }
+  else
+  {
+    while (gyroGet(GYRO_LR1) > gyroPos)
+    {
       delay(15);
     }
   }
@@ -172,7 +200,8 @@ mogoAutonSlave(int direction) {
   TaskHandle moveBase_5 = taskRunLoop(driveForward, 50);
   delay(750);
   mogo(127);
-  delay(750);;
+  delay(750);
+  ;
   taskDelete(moveBase_5);
   driveSpeed(0);
   mogo(0);
@@ -192,15 +221,21 @@ mogoAutonSlave(int direction) {
  */
 
 inline void
-mogoAuton5(int direction) {
+mogoAuton5(int direction)
+{
   int gyroPos = direction * 175;
-  TaskHandle basePID_2 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void * ) gyroPos, TASK_PRIORITY_DEFAULT);
-  if (direction == 1) {
-    while (gyroGet(GYRO_LR1) < gyroPos) {
+  TaskHandle basePID_2 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void *)gyroPos, TASK_PRIORITY_DEFAULT);
+  if (direction == 1)
+  {
+    while (gyroGet(GYRO_LR1) < gyroPos)
+    {
       delay(15);
     }
-  } else {
-    while (gyroGet(GYRO_LR1) > gyroPos) {
+  }
+  else
+  {
+    while (gyroGet(GYRO_LR1) > gyroPos)
+    {
       delay(15);
     }
   }
@@ -283,16 +318,19 @@ newprogSkills() {
 */
 
 inline void
-boonkTheMogo() {
+boonkTheMogo()
+{
   TaskHandle rotate;
   driveForward();
-  while (encoderGet(ENC_RIGHT) < 500) {
+  while (encoderGet(ENC_RIGHT) < 500)
+  {
     delay(15);
   }
   driveSpeed(0);
   int gyroPos = 45;
-  rotate = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void * ) gyroPos, TASK_PRIORITY_DEFAULT);
-  while (gyroGet(GYRO_LR1) > gyroPos) {
+  rotate = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void *)gyroPos, TASK_PRIORITY_DEFAULT);
+  while (gyroGet(GYRO_LR1) > gyroPos)
+  {
     delay(15);
   }
   wait(500);
@@ -300,13 +338,15 @@ boonkTheMogo() {
   driveSpeed(0);
   encoderReset(ENC_RIGHT);
   driveForward();
-  while (encoderGet(ENC_RIGHT) < 1000) {
+  while (encoderGet(ENC_RIGHT) < 1000)
+  {
     delay(15);
   }
   driveSpeed(0);
   gyroPos = -45;
-  rotate = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void * ) gyroPos, TASK_PRIORITY_DEFAULT);
-  while (gyroGet(GYRO_LR1) > gyroPos) {
+  rotate = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void *)gyroPos, TASK_PRIORITY_DEFAULT);
+  while (gyroGet(GYRO_LR1) > gyroPos)
+  {
     delay(15);
   }
   wait(500);
@@ -314,13 +354,15 @@ boonkTheMogo() {
   driveSpeed(0);
   encoderReset(ENC_RIGHT);
   driveForward();
-  while (encoderGet(ENC_RIGHT) < 500) {
+  while (encoderGet(ENC_RIGHT) < 500)
+  {
     delay(15);
   }
   driveSpeed(0);
   gyroPos = -90;
-  rotate = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void * ) gyroPos, TASK_PRIORITY_DEFAULT);
-  while (gyroGet(GYRO_LR1) > gyroPos) {
+  rotate = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void *)gyroPos, TASK_PRIORITY_DEFAULT);
+  while (gyroGet(GYRO_LR1) > gyroPos)
+  {
     delay(15);
   }
   wait(500);
@@ -330,7 +372,8 @@ boonkTheMogo() {
   wait(250);
   driveSpeed(0);
   mogo(-127);
-  while (analogRead(MOGO_SENSOR) > 1750) {
+  while (analogRead(MOGO_SENSOR) > 1750)
+  {
     delay(15);
   }
   mogo(-20);
@@ -338,8 +381,9 @@ boonkTheMogo() {
   wait(250);
   driveSpeed(0);
   gyroPos = -45;
-  rotate = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void * ) gyroPos, TASK_PRIORITY_DEFAULT);
-  while (gyroGet(GYRO_LR1) > gyroPos) {
+  rotate = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void *)gyroPos, TASK_PRIORITY_DEFAULT);
+  while (gyroGet(GYRO_LR1) > gyroPos)
+  {
     delay(15);
   }
   wait(500);
@@ -347,13 +391,15 @@ boonkTheMogo() {
   driveSpeed(0);
   encoderReset(ENC_RIGHT);
   driveBackward();
-  while (encoderGet(ENC_RIGHT) > -500) {
+  while (encoderGet(ENC_RIGHT) > -500)
+  {
     delay(15);
   }
   driveSpeed(0);
   gyroPos = -135;
-  rotate = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void * ) gyroPos, TASK_PRIORITY_DEFAULT);
-  while (gyroGet(GYRO_LR1) > gyroPos) {
+  rotate = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void *)gyroPos, TASK_PRIORITY_DEFAULT);
+  while (gyroGet(GYRO_LR1) > gyroPos)
+  {
     delay(15);
   }
   wait(500);
@@ -361,12 +407,14 @@ boonkTheMogo() {
   encoderReset(ENC_RIGHT);
   driveSpeed(0);
   driveForward();
-  while (encoderGet(ENC_RIGHT) < 1000) {
+  while (encoderGet(ENC_RIGHT) < 1000)
+  {
     delay(15);
   }
   gyroPos = -180;
-  rotate = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void * ) gyroPos, TASK_PRIORITY_DEFAULT);
-  while (gyroGet(GYRO_LR1) > gyroPos) {
+  rotate = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void *)gyroPos, TASK_PRIORITY_DEFAULT);
+  while (gyroGet(GYRO_LR1) > gyroPos)
+  {
     delay(15);
   }
   wait(500);
@@ -388,7 +436,8 @@ boonkTheMogo() {
  * Currently 72 points (2 in 20, 3 in 10, and 1 cone)
  */
 inline void
-progSkills() {
+progSkills()
+{
   //start first mogo
   mogoAutonMaster(2);
   mogoAutonSlave(-1);
@@ -405,10 +454,12 @@ progSkills() {
   driveSpeed(0);
   int gyroPos = -93;
   int armCount = 0;
-  TaskHandle basePID_2 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void * ) gyroPos, TASK_PRIORITY_DEFAULT);
-  while (gyroGet(GYRO_LR1) > gyroPos) {
+  TaskHandle basePID_2 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void *)gyroPos, TASK_PRIORITY_DEFAULT);
+  while (gyroGet(GYRO_LR1) > gyroPos)
+  {
     delay(15);
-    if (!armCount) {
+    if (!armCount)
+    {
       arm(127);
       wait(50);
       arm(0);
@@ -422,8 +473,9 @@ progSkills() {
   encoderReset(ENC_RIGHT);
   int drivePos = 400;
   driveForward();
-  TaskHandle moveBase_3 = taskCreate(driveToPID, TASK_DEFAULT_STACK_SIZE, (void * ) drivePos, TASK_PRIORITY_DEFAULT);
-  while (encoderGet(ENC_RIGHT) < drivePos) {
+  TaskHandle moveBase_3 = taskCreate(driveToPID, TASK_DEFAULT_STACK_SIZE, (void *)drivePos, TASK_PRIORITY_DEFAULT);
+  while (encoderGet(ENC_RIGHT) < drivePos)
+  {
     delay(15);
   }
   wait(500);
@@ -432,10 +484,12 @@ progSkills() {
   wait(300);
   gyroPos = -200;
   mogo(127);
-  TaskHandle basePID_3 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void * ) gyroPos, TASK_PRIORITY_DEFAULT);
-  while (gyroGet(GYRO_LR1) > gyroPos) {
+  TaskHandle basePID_3 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void *)gyroPos, TASK_PRIORITY_DEFAULT);
+  while (gyroGet(GYRO_LR1) > gyroPos)
+  {
     delay(15);
-    if (analogRead(MOGO_SENSOR) > 3000) {
+    if (analogRead(MOGO_SENSOR) > 3000)
+    {
       mogo(63);
     }
   }
@@ -445,25 +499,29 @@ progSkills() {
   driveSpeed(-30);
   wait(1000);
   gyroReset(GYRO_LR1);
-  while (analogRead(MOGO_SENSOR) < 3000) {
+  while (analogRead(MOGO_SENSOR) < 3000)
+  {
     mogo(127);
   }
   mogo(63);
   encoderReset(ENC_RIGHT);
   driveForward();
-  while (encoderGet(ENC_RIGHT) < 1250) {
+  while (encoderGet(ENC_RIGHT) < 1250)
+  {
     delay(15);
   }
   driveSpeed(0);
   mogo(-127);
-  while (analogRead(MOGO_SENSOR) > 1770) {
+  while (analogRead(MOGO_SENSOR) > 1770)
+  {
     delay(15);
   }
   wait(250);
   mogo(0);
   gyroPos = -183;
-  TaskHandle basePID_4 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void * ) gyroPos, TASK_PRIORITY_DEFAULT);
-  while (gyroGet(GYRO_LR1) > gyroPos) {
+  TaskHandle basePID_4 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void *)gyroPos, TASK_PRIORITY_DEFAULT);
+  while (gyroGet(GYRO_LR1) > gyroPos)
+  {
     delay(15);
   }
   wait(250);
@@ -472,9 +530,11 @@ progSkills() {
   encoderReset(ENC_RIGHT);
   driveForward();
   mogo(127);
-  while (encoderGet(ENC_RIGHT) < 825) {
+  while (encoderGet(ENC_RIGHT) < 825)
+  {
     delay(15);
-    if (analogRead(MOGO_SENSOR) > 2300) {
+    if (analogRead(MOGO_SENSOR) > 2300)
+    {
       mogo(-10);
     }
   }
@@ -491,8 +551,9 @@ progSkills() {
   wait(100);
   driveSpeed(0);
   gyroPos = 90;
-  TaskHandle basePID_6 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void * ) gyroPos, TASK_PRIORITY_DEFAULT);
-  while (gyroGet(GYRO_LR1) < gyroPos) {
+  TaskHandle basePID_6 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void *)gyroPos, TASK_PRIORITY_DEFAULT);
+  while (gyroGet(GYRO_LR1) < gyroPos)
+  {
     delay(15);
   }
   wait(500);
@@ -502,8 +563,9 @@ progSkills() {
   encoderReset(ENC_RIGHT);
   drivePos = 775;
   driveForward();
-  TaskHandle moveBase_4 = taskCreate(driveToPID, TASK_DEFAULT_STACK_SIZE, (void * ) drivePos, TASK_PRIORITY_DEFAULT);
-  while (encoderGet(ENC_RIGHT) < drivePos) {
+  TaskHandle moveBase_4 = taskCreate(driveToPID, TASK_DEFAULT_STACK_SIZE, (void *)drivePos, TASK_PRIORITY_DEFAULT);
+  while (encoderGet(ENC_RIGHT) < drivePos)
+  {
     delay(15);
   }
   wait(500);
@@ -513,17 +575,20 @@ progSkills() {
 
   gyroPos = 180;
   mogo(127);
-  TaskHandle basePID_7 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void * ) gyroPos, TASK_PRIORITY_DEFAULT);
-  while (gyroGet(GYRO_LR1) < gyroPos) {
+  TaskHandle basePID_7 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void *)gyroPos, TASK_PRIORITY_DEFAULT);
+  while (gyroGet(GYRO_LR1) < gyroPos)
+  {
     delay(15);
-    if (analogRead(MOGO_SENSOR) > 3000) {
+    if (analogRead(MOGO_SENSOR) > 3000)
+    {
       mogo(63);
     }
   }
   wait(250);
   driveSpeed(0);
   taskDelete(basePID_7);
-  while (analogRead(MOGO_SENSOR) < 3000) {
+  while (analogRead(MOGO_SENSOR) < 3000)
+  {
     mogo(127);
   }
   mogo(63);
@@ -532,14 +597,16 @@ progSkills() {
   wait(1250);
   driveSpeed(0);
   mogo(-127);
-  while (analogRead(MOGO_SENSOR) > 1770) {
+  while (analogRead(MOGO_SENSOR) > 1770)
+  {
     delay(15);
   }
   wait(250);
   mogo(0);
   gyroPos = 0;
-  TaskHandle basePID_20 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void * ) gyroPos, TASK_PRIORITY_DEFAULT);
-  while (gyroGet(GYRO_LR1) > gyroPos) {
+  TaskHandle basePID_20 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void *)gyroPos, TASK_PRIORITY_DEFAULT);
+  while (gyroGet(GYRO_LR1) > gyroPos)
+  {
     delay(15);
   }
   wait(250);
@@ -548,9 +615,11 @@ progSkills() {
   encoderReset(ENC_RIGHT);
   driveForward();
   mogo(127);
-  while (encoderGet(ENC_RIGHT) < 825) {
+  while (encoderGet(ENC_RIGHT) < 825)
+  {
     delay(15);
-    if (analogRead(MOGO_SENSOR) > 2300) {
+    if (analogRead(MOGO_SENSOR) > 2300)
+    {
       mogo(-10);
     }
   }
@@ -562,8 +631,9 @@ progSkills() {
 
   //start third mogo
   gyroPos = 180;
-  TaskHandle basePID_5 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void * ) gyroPos, TASK_PRIORITY_DEFAULT);
-  while (gyroGet(GYRO_LR1) > gyroPos) {
+  TaskHandle basePID_5 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void *)gyroPos, TASK_PRIORITY_DEFAULT);
+  while (gyroGet(GYRO_LR1) > gyroPos)
+  {
     delay(15);
   }
   wait(500);
@@ -574,16 +644,20 @@ progSkills() {
   driveForward();
   mogo(127);
   bar(-63);
-  while (encoderGet(ENC_RIGHT) < 1500) {
+  while (encoderGet(ENC_RIGHT) < 1500)
+  {
     delay(15);
-    if (analogRead(MOGO_SENSOR) > 3000) {
+    if (analogRead(MOGO_SENSOR) > 3000)
+    {
       mogo(40);
     }
   }
   mogo(-127);
-  while (encoderGet(ENC_RIGHT) < 2250) {
+  while (encoderGet(ENC_RIGHT) < 2250)
+  {
     delay(15);
-    if (analogRead(MOGO_SENSOR) < 2700) {
+    if (analogRead(MOGO_SENSOR) < 2700)
+    {
       mogo(-10);
     }
   }
@@ -600,8 +674,9 @@ progSkills() {
   wait(150);
   driveSpeed(0);
   gyroPos = 90;
-  TaskHandle basePID_26 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void * ) gyroPos, TASK_PRIORITY_DEFAULT);
-  while (gyroGet(GYRO_LR1) > gyroPos) {
+  TaskHandle basePID_26 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void *)gyroPos, TASK_PRIORITY_DEFAULT);
+  while (gyroGet(GYRO_LR1) > gyroPos)
+  {
     delay(15);
   }
   wait(500);
@@ -611,8 +686,9 @@ progSkills() {
   encoderReset(ENC_RIGHT);
   drivePos = 775;
   driveForward();
-  TaskHandle moveBase_29 = taskCreate(driveToPID, TASK_DEFAULT_STACK_SIZE, (void * ) drivePos, TASK_PRIORITY_DEFAULT);
-  while (encoderGet(ENC_RIGHT) < drivePos) {
+  TaskHandle moveBase_29 = taskCreate(driveToPID, TASK_DEFAULT_STACK_SIZE, (void *)drivePos, TASK_PRIORITY_DEFAULT);
+  while (encoderGet(ENC_RIGHT) < drivePos)
+  {
     delay(15);
   }
   wait(500);
@@ -622,17 +698,20 @@ progSkills() {
 
   gyroPos = 180;
   mogo(127);
-  TaskHandle basePID_27 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void * ) gyroPos, TASK_PRIORITY_DEFAULT);
-  while (gyroGet(GYRO_LR1) > gyroPos) {
+  TaskHandle basePID_27 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void *)gyroPos, TASK_PRIORITY_DEFAULT);
+  while (gyroGet(GYRO_LR1) > gyroPos)
+  {
     delay(15);
-    if (analogRead(MOGO_SENSOR) > 3000) {
+    if (analogRead(MOGO_SENSOR) > 3000)
+    {
       mogo(63);
     }
   }
   wait(250);
   driveSpeed(0);
   taskDelete(basePID_27);
-  while (analogRead(MOGO_SENSOR) < 3000) {
+  while (analogRead(MOGO_SENSOR) < 3000)
+  {
     mogo(127);
   }
   mogo(63);
@@ -641,14 +720,16 @@ progSkills() {
   wait(1250);
   driveSpeed(0);
   mogo(-127);
-  while (analogRead(MOGO_SENSOR) > 1770) {
+  while (analogRead(MOGO_SENSOR) > 1770)
+  {
     delay(15);
   }
   wait(250);
   mogo(0);
   gyroPos = 0;
-  TaskHandle basePID_8 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void * ) gyroPos, TASK_PRIORITY_DEFAULT);
-  while (gyroGet(GYRO_LR1) < gyroPos) {
+  TaskHandle basePID_8 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void *)gyroPos, TASK_PRIORITY_DEFAULT);
+  while (gyroGet(GYRO_LR1) < gyroPos)
+  {
     delay(15);
   }
   wait(250);
@@ -657,16 +738,19 @@ progSkills() {
   encoderReset(ENC_RIGHT);
   driveForward();
   mogo(127);
-  while (encoderGet(ENC_RIGHT) < 750) {
+  while (encoderGet(ENC_RIGHT) < 750)
+  {
     delay(15);
-    if (analogRead(MOGO_SENSOR) < 1800) {
+    if (analogRead(MOGO_SENSOR) < 1800)
+    {
       mogo(0);
     }
   }
   mogo(0);
   gyroPos = -45;
-  TaskHandle basePID_9 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void * ) gyroPos, TASK_PRIORITY_DEFAULT);
-  while (gyroGet(GYRO_LR1) > gyroPos) {
+  TaskHandle basePID_9 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void *)gyroPos, TASK_PRIORITY_DEFAULT);
+  while (gyroGet(GYRO_LR1) > gyroPos)
+  {
     delay(15);
   }
   wait(250);
@@ -675,12 +759,14 @@ progSkills() {
   wait(250);
   encoderReset(ENC_RIGHT);
   driveForward();
-  while (encoderGet(ENC_RIGHT) < 500) {
+  while (encoderGet(ENC_RIGHT) < 500)
+  {
     delay(15);
   }
   gyroPos = 0;
-  TaskHandle basePID_10 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void * ) gyroPos, TASK_PRIORITY_DEFAULT);
-  while (gyroGet(GYRO_LR1) > gyroPos) {
+  TaskHandle basePID_10 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void *)gyroPos, TASK_PRIORITY_DEFAULT);
+  while (gyroGet(GYRO_LR1) > gyroPos)
+  {
     delay(15);
   }
   wait(250);
@@ -711,8 +797,9 @@ progSkills() {
   wait(250);
   driveSpeed(0);
   gyroPos = -90;
-  TaskHandle basePID_12 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void * ) gyroPos, TASK_PRIORITY_DEFAULT);
-  while (gyroGet(GYRO_LR1) > gyroPos) {
+  TaskHandle basePID_12 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void *)gyroPos, TASK_PRIORITY_DEFAULT);
+  while (gyroGet(GYRO_LR1) > gyroPos)
+  {
     delay(15);
   }
   wait(250);
@@ -721,8 +808,9 @@ progSkills() {
   encoderReset(ENC_RIGHT);
   drivePos = 325;
   driveForward();
-  TaskHandle moveBase_12 = taskCreate(driveToPID, TASK_DEFAULT_STACK_SIZE, (void * ) drivePos, TASK_PRIORITY_DEFAULT);
-  while (encoderGet(ENC_RIGHT) < drivePos) {
+  TaskHandle moveBase_12 = taskCreate(driveToPID, TASK_DEFAULT_STACK_SIZE, (void *)drivePos, TASK_PRIORITY_DEFAULT);
+  while (encoderGet(ENC_RIGHT) < drivePos)
+  {
     delay(15);
   }
   wait(500);
@@ -732,17 +820,20 @@ progSkills() {
 
   gyroPos = -180;
   mogo(127);
-  TaskHandle basePID_11 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void * ) gyroPos, TASK_PRIORITY_DEFAULT);
-  while (gyroGet(GYRO_LR1) > gyroPos) {
+  TaskHandle basePID_11 = taskCreate(rotateToPID, TASK_DEFAULT_STACK_SIZE, (void *)gyroPos, TASK_PRIORITY_DEFAULT);
+  while (gyroGet(GYRO_LR1) > gyroPos)
+  {
     delay(15);
-    if (analogRead(MOGO_SENSOR) > 3000) {
+    if (analogRead(MOGO_SENSOR) > 3000)
+    {
       mogo(63);
     }
   }
   wait(500);
   driveSpeed(0);
   taskDelete(basePID_11);
-  while (analogRead(MOGO_SENSOR) < 3000) {
+  while (analogRead(MOGO_SENSOR) < 3000)
+  {
     mogo(127);
   }
   mogo(63);
@@ -750,13 +841,17 @@ progSkills() {
   encoderReset(ENC_RIGHT);
   driveForward();
   mogo(-127);
-  while (encoderGet(ENC_RIGHT) < 2000) {
+  while (encoderGet(ENC_RIGHT) < 2000)
+  {
     delay(15);
-    if (analogRead(MOGO_SENSOR) > 2700) {
-      mogo(-10);;
+    if (analogRead(MOGO_SENSOR) > 2700)
+    {
+      mogo(-10);
+      ;
     }
   }
-  while (encoderGet(ENC_RIGHT) < 2250) {
+  while (encoderGet(ENC_RIGHT) < 2250)
+  {
     delay(15);
   }
   driveSpeed(127);
@@ -774,16 +869,76 @@ progSkills() {
  * selected auton and allows for added and removed using
  * smaller margins of errors for selection ranges
  */
-void
-autonomous() {
-  if (analogRead(AUTO_SENSOR) > 4000) { //blue
+
+void oldAutonomous()
+{
+  if (analogRead(AUTO_SENSOR) > 4000)
+  { //blue
     mogoAutonMaster(2);
     mogoAutonSlave(1);
-  } else if (analogRead(AUTO_SENSOR) < 100) { //red
+  }
+  else if (analogRead(AUTO_SENSOR) < 100)
+  { //red
     mogoAutonMaster(2);
     mogoAutonSlave(-1);
-  } else {
+  }
+  else
+  {
     //do nothing
+  }
+}
+
+void autonomous()
+{
+  //20pt mogo
+  if (selectAuton[0] == 1)
+  {
+    //one cone
+    if (selectAuton[1] == 1)
+    {
+      //red side
+      if (selectAuton[2] == 1)
+      {
+        mogoAutonMaster(2);
+        mogoAutonSlave(-1);
+      }
+      //blue side
+      if (selectAuton[2] == 2)
+      {
+        mogoAutonMaster(2);
+        mogoAutonSlave(1);
+      }
+    }
+    //two cones
+    if (selectAuton[1] == 2)
+    {
+      //red side
+      if (selectAuton[2] == 1)
+      {
+        mogoAutonMaster(1);
+        mogoAutonSlave(-1);
+      }
+      //blue side
+      if (selectAuton[2] == 2)
+      {
+        mogoAutonMaster(1);
+        mogoAutonSlave(1);
+      }
+    }
+  } 
+
+
+  //5pt mogo
+  if (selectAuton[0] == 2)
+  {
+  }
+  //stationary
+  if (selectAuton[0] == 3)
+  {
+  }
+  //programming skills
+  if (selectAuton[0] == 4)
+  {
   }
 }
 

@@ -67,12 +67,12 @@ typedef struct {
 
 auton cone_on_pole;
 
-int fuckme;
-int helpme;
+int selectAuton[3];
 
 void stackCones();
+void lcdAuton();
 void startOneCone(), startupSequence(), mogoRed();
-void lcdCounter();
+void lcdCounter(void *parameter);
 
 /**
  * Runs the user autonomous code. This function will be started in its own task with the default
