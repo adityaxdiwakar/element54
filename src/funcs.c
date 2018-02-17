@@ -110,7 +110,7 @@ driveBackward() {
 
 void
 driveSpeed(int power) {
-  setMotor(CHASSIS_L1, -power);
+  setMotor(CHASSIS_L1, power);
   setMotor(CHASSIS_L2, power);
   setMotor(CHASSIS_R2, power);
   setMotor(CHASSIS_R1, -power);
@@ -118,7 +118,7 @@ driveSpeed(int power) {
 
 void
 driveTurn(int power) {
-  setMotor(CHASSIS_L1, -power);
+  setMotor(CHASSIS_L1, power);
   setMotor(CHASSIS_L2, power);
   setMotor(CHASSIS_R2, -power);
   setMotor(CHASSIS_R1, power);

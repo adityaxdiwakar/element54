@@ -93,7 +93,7 @@ setMotor( unsigned char iPort, int iSpeed ) {
 
 void
 tank( int power, int turn ) {
-  setMotor(CHASSIS_L1, -power - turn);
+  setMotor(CHASSIS_L1, power + turn);
   setMotor(CHASSIS_L2, power + turn);
   setMotor(CHASSIS_R2, power - turn);
   setMotor(CHASSIS_R1, -power + turn);
@@ -119,7 +119,7 @@ bar( int iSpeed ) {
 
 void
 mogo(int iSpeed) {
-  setMotor(MOGO_L1, iSpeed);
+  setMotor(MOGO_L1, -iSpeed);
   setMotor(MOGO_R1, iSpeed);
 }
 

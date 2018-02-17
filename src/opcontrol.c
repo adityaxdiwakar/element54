@@ -16,9 +16,12 @@ void armControl(bool bBtnUp, bool bBtnDown, bool bBtn2Up, bool bBtn2Down)
 {
   if (bBtnUp || bBtnDown || bBtn2Up || bBtn2Down)
   {
-    if(bBtnUp || bBtn2Up) iOutput = 127;
-    else if(bBtnDown || bBtn2Down) iOutput = -127;
-    else iOutput = 0;
+    if (bBtnUp || bBtn2Up)
+      iOutput = 127;
+    else if (bBtnDown || bBtn2Down)
+      iOutput = -127;
+    else
+      iOutput = 0;
   }
   else if (analogRead(ARM_SENSOR) < 1500)
     iOutput = -20;
@@ -32,9 +35,12 @@ void chainControl(bool bBtnUp, bool bBtnDown, bool bBtn2Up, bool bBtn2Down)
 {
   if (bBtnUp || bBtnDown || bBtn2Up || bBtn2Down)
   {
-    if(bBtnUp || bBtn2Up) chainOutput = -127;
-    else if(bBtnDown || bBtn2Down) chainOutput = 127;
-    else chainOutput = 0;
+    if (bBtnUp || bBtn2Up)
+      chainOutput = -127;
+    else if (bBtnDown || bBtn2Down)
+      chainOutput = 127;
+    else
+      chainOutput = 0;
   }
   else if (analogRead(BAR_SENSOR) > 1500)
     chainOutput = -15;
@@ -54,24 +60,25 @@ void coneIntakeControl()
 {
   while (isEnabled())
   {
-    if (joystickGetDigital(1, 7, JOY_DOWN) || joystickGetDigital(2,7,JOY_DOWN))
+    if (joystickGetDigital(1, 7, JOY_DOWN) || joystickGetDigital(2, 7, JOY_DOWN))
     {
       setMotor(ROLL_LR1, 127);
       for (int i = 0; i < 25; i++)
       {
         setMotor(ROLL_LR1, 127);
         delay(10);
-   if (joystickGetDigital(1, 7, JOY_LEFT) || joystickGetDigital(2,7,JOY_LEFT))
+        if (joystickGetDigital(1, 7, JOY_LEFT) || joystickGetDigital(2, 7, JOY_LEFT))
         {
           i = 101;
         }
       }
     }
-    else if (joystickGetDigital(1, 7, JOY_LEFT) || joystickGetDigital(2,7,JOY_LEFT))
+    else if (joystickGetDigital(1, 7, JOY_LEFT) || joystickGetDigital(2, 7, JOY_LEFT))
     {
-    coneOutput = -127;
+      coneOutput = -127;
     }
-     else if (analogRead(ARM_SENSOR) < 1800 && analogRead(BAR_SENSOR) < 900) {
+    else if (analogRead(ARM_SENSOR) < 1800 && analogRead(BAR_SENSOR) < 900)
+    {
       coneOutput = -127;
     }
     else
@@ -92,54 +99,27 @@ void mogoIntakeControl()
     else if (joystickGetDigital(1, 7, JOY_RIGHT) || joystickGetDigital(2, 7, JOY_RIGHT))
       mogoOutput = -127;
   }
-  else if(analogRead(MOGO_SENSOR) > 3000) 
+  else if (analogRead(MOGO_SENSOR) > 3000)
     mogoOutput = 30;
-  else 
+  else
     mogoOutput = 0;
-  setMotor(MOGO_L1, mogoOutput);
-  setMotor(MOGO_R1, mogoOutput);
-}
-
-int drivePos, gyroPos;
-void baseHold()
-{
-  bool powerMe = 0;
-  while (true)
-  {
-    if (joystickGetDigital(1, 8, JOY_LEFT))
-    {
-      powerMe = 1;
-      drivePos = encoderGet(ENC_RIGHT);
-      gyroPos = gyroGet(GYRO_LR1);
-    }
-    wait(250);
-    while (powerMe == 1)
-    {
-      if ((encoderGet(ENC_RIGHT) > drivePos + 3) || (encoderGet(ENC_RIGHT) < drivePos - 3))
-      {
-        driveSpeed(iDrivePID(drivePos));
-      }
-      if (joystickGetDigital(1, 8, JOY_LEFT))
-        powerMe = 0;
-    }
-    wait(250);
-  }
+  mogo(mogoOutput);
 }
 
 void operatorControl()
 {
-  encoderReset(ENC_RIGHT); 
+  encoderReset(ENC_RIGHT);
   TaskHandle coneTaskHandle = taskCreate(coneIntakeControl, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
   TaskHandle mogoTaskHandle = taskRunLoop(mogoIntakeControl, 50);
-  TaskHandle lcdTaskHandle = taskCreate(lcdCounter, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+  // TaskHandle lcdTaskHandle = taskCreate(lcdCounter, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
   while (isEnabled())
-  {    
+  {
     delay(20);
     tank(joystickGetAnalog(1, 2) + joystickGetAnalog(2,2), joystickGetAnalog(1, 1) + joystickGetAnalog(2, 1));
     armControl(joystickGetDigital(1, 6, JOY_UP), joystickGetDigital(1, 6, JOY_DOWN), joystickGetDigital(2,6,JOY_UP), joystickGetDigital(2,6,JOY_DOWN));
     chainControl(joystickGetDigital(1, 5, JOY_UP), joystickGetDigital(1, 5, JOY_DOWN), joystickGetDigital(2,5,JOY_UP), joystickGetDigital(2,5,JOY_DOWN));
-  } 
-  taskDelete(mogoTaskHandle); 
+  }
+  taskDelete(mogoTaskHandle);
   taskDelete(coneTaskHandle);
-  taskDelete(lcdTaskHandle);
+  //taskDelete(lcdTaskHandle);
 }

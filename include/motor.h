@@ -8,16 +8,16 @@
  * Motor names
  */
 
-#define CHASSIS_R2 8
-#define CHASSIS_R1 9
-#define MOGO_L1    1
-#define MOGO_R1    10
-#define ARM_L1     5
-#define ARM_R1     6
-#define CHAIN_LR1  7
-#define ROLL_LR1   4
-#define CHASSIS_L1 2
-#define CHASSIS_L2 3
+#define CHASSIS_R2 9
+#define CHASSIS_R1 1
+#define MOGO_L1    5
+#define MOGO_R1    4
+#define ARM_L1     8
+#define ARM_R1     3
+#define CHAIN_LR1  6
+#define ROLL_LR1   7
+#define CHASSIS_L1 10
+#define CHASSIS_L2 2
 
 /**
  * Sensor used for motors

@@ -20,6 +20,7 @@ initialize() {
   GYRO_LR1 = gyroInit(GYRO, 0);
   lcdInit(uart1);
   lcdClear(uart1);
+  lcdSetBacklight(uart1, 1);
 
   if(!isEnabled()) { 
   lcdAuton(); }

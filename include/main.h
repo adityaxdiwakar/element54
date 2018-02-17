@@ -70,6 +70,7 @@ auton cone_on_pole;
 int selectAuton[3];
 
 void stackCones();
+void progSkills();
 void lcdAuton();
 void startOneCone(), startupSequence(), mogoRed();
 void lcdCounter(void *parameter);
