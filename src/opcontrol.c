@@ -111,7 +111,7 @@ void operatorControl()
   encoderReset(ENC_RIGHT);
   TaskHandle coneTaskHandle = taskCreate(coneIntakeControl, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
   TaskHandle mogoTaskHandle = taskRunLoop(mogoIntakeControl, 50);
-  // TaskHandle lcdTaskHandle = taskCreate(lcdCounter, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+  TaskHandle lcdTaskHandle = taskCreate(lcdCounter, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
   while (isEnabled())
   {
     delay(20);
@@ -121,5 +121,5 @@ void operatorControl()
   }
   taskDelete(mogoTaskHandle);
   taskDelete(coneTaskHandle);
-  //taskDelete(lcdTaskHandle);
+  taskDelete(lcdTaskHandle);
 }
