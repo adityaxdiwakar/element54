@@ -9,7 +9,17 @@ namespace drive {
         bool isTruespeed;
     } motors;
 
-    void init(int motorNum, bool isReverse, bool isTruespeed, char Location);
+    void init(int motorNum, bool isReverse, bool isTruespeed, char Location[]);
+    void trueSpeed(int iPort, int iSpeed);
+    void left(int iSpeed);
+    void right(int iSpeed);
+    void speed(int iSpeed);
+    void timed(int iSpeed, int duration);
+    void waitUntil(int iSpeed, int target);
+
+    namespace teleop {
+        void arcade(int speed, int turn);
+    }
 }
 
 #endif
