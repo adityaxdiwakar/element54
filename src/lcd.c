@@ -5,8 +5,9 @@ void lcdCounter(void *parameter)
 {
     while (true)
     {
-        lcdPrint(uart1, 1, "Bar is %d", analogRead(BAR_SENSOR));
-        delay(10);
+        lcdSetText(uart1, 1, "   1961 Xenon   ");
+        lcdPrint(uart1, 2, "L: %d 4B: %d", analogRead(ARM_SENSOR), analogRead(BAR_SENSOR));
+        delay(100);
     }
 }
 

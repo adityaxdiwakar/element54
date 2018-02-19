@@ -87,7 +87,7 @@ void rollerOUT() {
 }
 
 void rollerPID() {
-  setMotor(ROLL_LR1, -20);
+  setMotor(ROLL_LR1, -63);
 }
 
 void moveRoller(int iSpeed) {

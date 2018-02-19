@@ -10,7 +10,7 @@
 
 unsigned long saveTime;
 bool blocked = false;
-inline void
+void
 mogoAutonMaster(int coneCount)
 {
   saveTime = millis();
@@ -28,6 +28,7 @@ mogoAutonMaster(int coneCount)
   }
   mogo(127);
   driveSpeed(127);
+  TaskHandle rollPID = taskRunLoop(rollerPID, 50);
   while (analogRead(MOGO_SENSOR) < mogoPos || analogRead(ARM_SENSOR) < armPos || encoderGet(ENC_RIGHT) < drivePos - 200)
   {
     delay(15);
@@ -79,7 +80,6 @@ mogoAutonMaster(int coneCount)
     armPos = 1700;
     arm(-127);
     bar(63);
-    setMotor(ROLL_LR1, -63);
     taskDelete(armMove_1);
     TaskHandle armMove_2 = taskCreate(armDown, TASK_DEFAULT_STACK_SIZE, (void *)armPos, TASK_PRIORITY_DEFAULT);
     int current = 2000;
@@ -98,36 +98,10 @@ mogoAutonMaster(int coneCount)
       setMotor(ROLL_LR1, -127);
     }
     taskDelete(armMove_2);
-    if (coneCount == 2)
-    {
-      arm(0);
-      bar(0);
-      wait(100);
-      arm(127);
-      wait(50);
-      arm(0);
-      bar(-127);
-      wait(750);
-      rollerOUT();
-      wait(250);
-      bar(0);
-      setMotor(ROLL_LR1, 0);
-      arm(0);
-      driveForward();
-      wait(150);
-      driveSpeed(0);
-      bar(127);
-      wait(500);
-      bar(45);
-      rollerIN();
-      arm(-127);
-      wait(500);
-      arm(0);
-      bar(0);
-      arm(127);
-      wait(150);
-      arm(0);
-    }
+    taskDelete(rollPID);
+
+    
+      
     TaskHandle basePID_1 = taskCreate(driveToPID, TASK_DEFAULT_STACK_SIZE, (void *)drivePos, TASK_PRIORITY_DEFAULT);
     while (encoderGet(ENC_RIGHT) > drivePos || runCone == 0)
     {
@@ -189,7 +163,7 @@ mogoAutonSlave(int direction)
   taskDelete(basePID_2);
   driveSpeed(0);
   wait(250);
-  int drivePos = 575;
+  int drivePos = 525;
   encoderReset(ENC_RIGHT);
   TaskHandle basePID_3 = taskCreate(driveToPID, TASK_DEFAULT_STACK_SIZE, (void *)drivePos, TASK_PRIORITY_DEFAULT);
   while (encoderGet(ENC_RIGHT) < drivePos)
@@ -967,6 +941,7 @@ void autonomous()
       }
     }
   }
+
 
   //5pt mogo
   if (selectAuton[0] == 2)

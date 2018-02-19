@@ -68,6 +68,8 @@ typedef struct {
 auton cone_on_pole;
 
 int selectAuton[3];
+ 
+void mogoAutonMaster(int coneCount);
 
 void stackCones();
 void progSkills();
