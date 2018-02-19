@@ -51,6 +51,8 @@
 #include "joystick.hpp"
 #include "arm.hpp"
 #include "drive.hpp"
+#include "mogo.hpp"
+#include "rollers.hpp"
 
 // Allow usage of this file in C++ programs
 #ifdef __cplusplus
