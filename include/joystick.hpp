@@ -1,6 +1,6 @@
 #ifndef JOYSTICK_H
 #define JOYSTICK_H
-#include "../include/API.h"
+#include "API.h"
 
 /** The joystick class */
 namespace joystick {

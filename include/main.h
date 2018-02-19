@@ -48,6 +48,9 @@
 #define MAIN_H_
 
 #include "API.h"
+#include "joystick.hpp"
+#include "arm.hpp"
+#include "drive.hpp"
 
 // Allow usage of this file in C++ programs
 #ifdef __cplusplus
