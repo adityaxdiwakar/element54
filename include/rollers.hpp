@@ -9,7 +9,7 @@ namespace rollers {
         bool isTruespeed;
     } motors;
 
-    void init(int motorNum, bool isReverse, bool isTruespeed, char Location[]);
+    void init(int motorNum, bool isReverse);
     void speed(int iSpeed);
     void timed(int iSpeed, int duration);
 
