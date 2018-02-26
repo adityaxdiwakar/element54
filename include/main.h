@@ -49,10 +49,37 @@
 
 #include "API.h"
 #include "joystick.hpp"
+#include "sensors.hpp"
 #include "arm.hpp"
 #include "drive.hpp"
 #include "mogo.hpp"
 #include "rollers.hpp"
+#include "bar.hpp"
+
+#define CHASSIS_R2 9
+#define CHASSIS_R1 1
+#define MOGO_L1    5
+#define MOGO_R1    4
+#define ARM_L1     8
+#define ARM_R1     3
+#define BAR_M1     6
+#define ROLL_M1    7
+#define CHASSIS_L1 10
+#define CHASSIS_L2 2
+
+ //analog
+#define ARM_SENSOR   1
+#define BAR_SENSOR   2
+#define MOGO_SENSOR  3
+#define AUTO_SENSOR  4 /*
+#define NOTHING      5 */
+#define GYRO_M1      6
+
+//digital
+#define ENC_RT 2
+#define ENC_RB 1
+#define ENC_LT 3
+#define ENC_LB 4
 
 // Allow usage of this file in C++ programs
 #ifdef __cplusplus

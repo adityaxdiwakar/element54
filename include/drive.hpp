@@ -5,18 +5,22 @@
 namespace drive {
     typedef struct {
         int motorNum;
-        bool isReverse;
+        int isReverse;
         bool isTruespeed;
     } motors;
 
-    void init(int motorNum, bool isReverse, bool isTruespeed, char Location[]);
+    void init(int motorNum, int isReverse, bool isTruespeed, char Location[]);
     void trueSpeed(int iPort, int iSpeed);
     void left(int iSpeed);
     void right(int iSpeed);
     void speed(int iSpeed);
     void timed(int iSpeed, int duration);
-    void waitUntil(int iSpeed, int target);
+    void waitUntil(int iSpeed, int target, bool reset);
 
+    namespace auton {
+        void pid(int distance);
+        void gyTurn(int heading, bool reset);
+    }
     namespace teleop {
         void arcade(int speed, int turn);
     }

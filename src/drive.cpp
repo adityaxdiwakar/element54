@@ -1,4 +1,5 @@
 #include "../include/drive.hpp"
+#include "../include/sensors.hpp"
 
 namespace drive {
     motors frontLeft;
@@ -6,7 +7,7 @@ namespace drive {
     motors backLeft;
     motors backRight;
 
-    void init(int motorNum, bool isReverse, bool isTruespeed, char location[]) {
+    void init(int motorNum, int isReverse, bool isTruespeed, char location[]) {
         if(location == "frontLeft") {
             frontLeft.motorNum = motorNum;
             frontLeft.isReverse = isReverse;
@@ -23,6 +24,15 @@ namespace drive {
             backLeft.motorNum = motorNum;
             backLeft.isReverse = isReverse;
             backLeft.isTruespeed = isTruespeed;
+        }
+    }
+
+    int sgn(int iSpeed) {
+        if(iSpeed > 127) {
+            return 127;
+        }
+        else {
+            return iSpeed;
         }
     }
 
@@ -44,25 +54,22 @@ namespace drive {
     };  
 
     void trueSpeed(int iPort, int iSpeed) {
-        if(iSpeed > 0) {
-            motorSet(iPort, MC29[iSpeed]);
+        if(iSpeed >= 0) {
+            motorSet(iPort, MC29[abs(sgn(iSpeed))]);
         }
         else if(iSpeed < 0) {
-            motorSet(iPort, -(MC29[iSpeed]));
-        }
-        else {
-            motorSet(iPort, 0);
+            motorSet(iPort, -(MC29[abs(sgn(iSpeed))]));
         }
     }
 
     void left(int iSpeed) {
-        trueSpeed(frontLeft.motorNum, iSpeed);
-        trueSpeed(backLeft.motorNum, iSpeed);
+        motorSet(frontLeft.motorNum, (iSpeed * frontLeft.isReverse));
+        motorSet(backLeft.motorNum, (iSpeed * backLeft.isReverse));
     }
 
     void right(int iSpeed) {
-        trueSpeed(frontRight.motorNum, iSpeed);
-        trueSpeed(backRight.motorNum, iSpeed);
+        motorSet(frontRight.motorNum, (iSpeed * frontRight.isReverse));
+        motorSet(backRight.motorNum, (iSpeed * backRight.isReverse));
     }
 
     void speed(int iSpeed) {
@@ -73,25 +80,98 @@ namespace drive {
         speed(iSpeed);
         delay(duration);
         speed(0);
-    } /*
-    void waitUntil(int iSpeed, int target) {
+    } 
+    void waitUntil(int iSpeed, int target, bool reset) {
+        if(reset) sensors::drive::reset();
         speed(iSpeed);
-        if(sensor::get(enc) > target) {
-            while(sensor::get(enc) > target) {
+        if(sensors::drive::right::get() > target) {
+            while(sensors::drive::right::get() > target) {
                 delay(15);
             }
         }
-        else if(sensor::get(enc) < taget) {
-            while(sensor::get(enc) < target) {
+        else if(sensors::drive::right::get() < target) {
+            while(sensors::drive::right::get() < target) {
                 delay(15);
             }
         }
-    }   */
-    
+        speed(0);
+    } 
+
+
+    namespace auton {
+        void pid(int distance) {
+            sensors::drive::reset();
+            
+            double kp = 0.5;
+            int kc = 60;
+            int brake = -60;
+            int dir = 1;
+            if(distance<0) {
+                dir = 0;
+                brake = -brake; }
+
+            while(true) {
+                int current = sensors::drive::right::get();
+                int error = distance - current;
+                int vel = error * kp;
+
+                //normalize vel
+                if(dir == 1 && vel < kc) vel = kc;
+                if(dir == 0 && vel > kc) vel = -kc;
+
+                speed(vel);
+
+                if(dir == 0 && error > 0) break;
+                if(dir == 1 && error < 0) break; 
+                delay(20); }
+            speed(brake);
+            delay(200);
+            speed(0);
+        }
+        void gyTurn(int heading, bool reset) {
+            if(reset) sensors::gyro::reset();
+
+            double kp = 3.5;
+            if(abs(heading - sensors::gyro::get() > 110)) kp = 1.8;
+            if(abs(heading - sensors::gyro::get() > 150)) kp = 1.2;
+            int kc = 60;
+            int brake = 60;
+            int dir = 0;
+            if(heading - sensors::gyro::get() < 0) {
+                dir = 1;
+                brake = -brake;
+            }
+
+            while(true) {
+                int current = sensors::gyro::get();
+                int error = heading - current;
+                int vel = error*kp;
+
+                
+                if(vel > 127) vel = 127;
+                if(vel < -127) vel = -127;
+
+                if(dir == 0 && vel < kc) vel = kc;
+                if(dir == 1 && vel > -kc) vel = -kc;
+
+                if(dir == 0 && error <= 0) break;
+                if(dir == 1 && error >= 0) break;
+
+                left(-vel);
+                right(vel);
+                delay(20);
+            }               
+            left(brake);
+            right(-brake);
+            delay(100);
+            speed(0);
+        }
+    }
+
     namespace teleop {
         void arcade(int speed, int turn) {
             left(speed + turn);
-            right(speed + turn);
+            right(speed - turn);
         }
     }
     }
