@@ -66,7 +66,7 @@ void rollerControl() {
           bSpin = true;
           rollTime = millis();
           }
-      else if((millis()-rollTime < 250) && bSpin) iOutput = -127;
+      else if((millis()-rollTime < 250) && bSpin) iOutput = 127;
       else if (analogRead(ARM_SENSOR) < 1800 && analogRead(BAR_SENSOR) < 900)
           iOutput = -127;
       else
