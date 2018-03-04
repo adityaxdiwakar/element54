@@ -1100,4 +1100,6 @@ void autonomous()
   }
 }
 
+//lcd code
+
 /* Footer of autonomous file */
