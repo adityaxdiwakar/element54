@@ -18,7 +18,7 @@ namespace sensors {
         namespace secondary {
             int get() {
                 if(!mainInit) {
-                    gyroMain = gyroInit(4, 0);
+                    gyroSecondary = gyroInit(4, 0);
                 }
                 return(gyroGet(gyroSecondary));
             }

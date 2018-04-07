@@ -1,5 +1,6 @@
 #include "../include/arm.hpp"
 #include "../include/joystick.hpp"
+#include "../include/sensors.hpp"
 
 namespace arm {
     motors left;
@@ -42,6 +43,7 @@ namespace arm {
     void teleop() {
         if(joystick::digital(6, joystick::Up)) iOutput = 127;
         else if(joystick::digital(6,joystick::Down)) iOutput = -127;
+        else if(sensors::arm::get() > 3200) iOutput = -20;
         else iOutput = 15;
         speed(iOutput);
     }

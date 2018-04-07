@@ -6,16 +6,14 @@ void opCtrl() {
   mogo::teleop();
   rollers::teleop();
   bar::teleop();
-  //lcdPrint(uart1, 1, "A: %d, M: %d", sensors::arm::get(), sensors::mogo::get());
-  //lcdPrint(uart1, 2, "B: %d G: %d", sensors::bar::get(), sensors::gyro::main::get());
+  lcdPrint(uart1, 1, "A: %d, M: %d", sensors::arm::get(), sensors::mogo::get());
+  lcdPrint(uart1, 2, "B: %d", sensors::bar::get());
   delay(20);
 }
 
-TaskHandle opctrl;
 void operatorControl() {
   lcdSetBacklight(uart1, true);
   while(true) { 
     opCtrl();
-    wait(20);
     }
 }

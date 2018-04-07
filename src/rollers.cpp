@@ -20,12 +20,21 @@ namespace rollers {
         speed(0);
     } 
 
-    int iOutput;
+    int iOutput; int startTime; bool toggled;
     void teleop() {
-        if(joystick::digital(7, joystick::Left)) iOutput = 127;
-        else if(joystick::digital(7,joystick::Down)) iOutput = -127;
-        else if(sensors::arm::get() > 2950 && sensors::bar::get() > 2500) iOutput = 127;
-        else iOutput = 25;
+        if(joystick::digital(7, joystick::Left)) {
+            iOutput = 127;
+            toggled = false;
+        }
+        else if(joystick::digital(7,joystick::Down)) {
+            iOutput = -127;
+            toggled = true;
+            startTime = millis();
+        }
+        else if(sensors::arm::get() > 2950 && sensors::bar::get() < 1300) iOutput = 63;
+        else iOutput = 30;
+
+        if(toggled && (millis() - startTime < 250)) iOutput = -127;
         speed(iOutput);
     }
 }

@@ -43,12 +43,19 @@ namespace drive {
 	62, 64, 67, 70, 72, 76, 79, 83, 84, 127,
     };  
 
+    int sgn(int x, int max = 127) {
+        if(x > max) {
+            return(max);
+        }
+        else return(x);
+    }
+
     void trueSpeed(int iPort, int iSpeed) {
         if(iSpeed > 0) {
-            motorSet(iPort, MC29[iSpeed]);
+            motorSet(iPort, MC29[sgn(abs(iSpeed))]);
         }
         else if(iSpeed < 0) {
-            motorSet(iPort, -(MC29[abs(iSpeed)]));
+            motorSet(iPort, -(MC29[sgn(abs(iSpeed))]));
         }
         else {
             motorSet(iPort, 0);
