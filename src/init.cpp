@@ -16,8 +16,11 @@ void initializeIO() {
   mogo::init(4, -1, "main");
   bar::init(5, 1, "left");
   bar::init(7, 1, "right");
+  printf("%d %d", sensors::drive::left::get(), sensors::drive::right::get());
 } 
 
 void initialize() {
   lcdInit(uart1);
+  //drive::joyInit.defaultY = joystick::analog(2);
+  //drive::joyInit.defaultX = joystick::analog(1);
 }

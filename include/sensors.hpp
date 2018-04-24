@@ -10,6 +10,17 @@ namespace sensors {
             int get();
         }
         int getAvg();
+        int get();
+        void reset();
+    }
+
+    namespace drive {
+        namespace left {
+            int get(); }
+        namespace right {
+            int get(); }
+        int get();
+        void reset();
     }
 
     namespace arm {

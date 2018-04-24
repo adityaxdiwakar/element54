@@ -43,7 +43,8 @@ namespace mogo {
     void teleop() {
         if(joystick::digital(7, joystick::Up)) iOutput = 127;
         else if(joystick::digital(7,joystick::Right)) iOutput = -127;
-        else if(sensors::mogo::get() > 3600) iOutput = 30;
+        else if(sensors::mogo::get() > 3600) iOutput = 30; 
+        else if(sensors::mogo::get() < 1300) iOutput = -20;
         else iOutput = 0;
         speed(iOutput);
     }

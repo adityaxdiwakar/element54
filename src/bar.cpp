@@ -39,9 +39,10 @@ namespace bar {
 
     int iOutput;
     void teleop() {
-        if(joystick::digital(5, joystick::Up) && sensors::bar::get() < 3100) iOutput = (3100 - sensors::bar::get()) / 18;
+        if(joystick::digital(5, joystick::Up) && sensors::bar::get() < 3220) iOutput = (3200 - sensors::bar::get()) / 18;
         else if(joystick::digital(5, joystick::Up)) iOutput = 127;
         else if(joystick::digital(5, joystick::Down)) iOutput = -127;
+        else if(sensors::bar::get() < 1300) iOutput = -15;
         else iOutput = 0;
         
         if(iOutput > 127) iOutput = 127;

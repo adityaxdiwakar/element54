@@ -31,10 +31,10 @@ namespace rollers {
             toggled = true;
             startTime = millis();
         }
-        else if(sensors::arm::get() > 2950 && sensors::bar::get() < 1300) iOutput = 63;
-        else iOutput = 30;
+        else if(sensors::arm::get() < 1250 && sensors::bar::get() < 1600) iOutput = 60;
+        else iOutput = 15;
 
-        if(toggled && (millis() - startTime < 250)) iOutput = -127;
+        if(toggled && (millis() - startTime < 500)) iOutput = -127;
         speed(iOutput);
     }
 }
