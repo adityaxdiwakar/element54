@@ -41,7 +41,7 @@ namespace arm {
 
     int iOutput;
     void teleop() {
-        if(joystick::digital(6, joystick::Up)) iOutput = ((sensors::arm::get() - 700)/2) + 63;
+        if(joystick::digital(6, joystick::Up)) iOutput = ((sensors::arm::get() - 700)/2) + 74;
         else if(joystick::digital(6,joystick::Down)) iOutput = -127;
         else if(sensors::arm::get() < 800) iOutput = -10;
         else iOutput = 15;
