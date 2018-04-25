@@ -238,7 +238,7 @@ namespace drive {
   void vDrive(void*parameter) {
       while(true) {
           speed(iDrivePID(((int)parameter)));
-      }
+      } 
   }
 
   void vRotate(void*parameter) {
