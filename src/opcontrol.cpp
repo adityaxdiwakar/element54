@@ -6,8 +6,8 @@ void opCtrl() {
   mogo::teleop();
   rollers::teleop();
   bar::teleop();
-  printf("arm %d mogo %d drive %d bar %d gyro %d fwd %d hor %d\n", sensors::arm::get(), sensors::mogo::get(), sensors::drive::get(), sensors::bar::get(), sensors::gyro::get()
-                                                                 , joystick::analog(2), joystick::analog(1));
+  /*printf("arm %d mogo %d drive %d bar %d gyro %d fwd %d hor %d\n", sensors::arm::get(), sensors::mogo::get(), sensors::drive::get(), sensors::bar::get(), sensors::gyro::get()
+                                                                 , joystick::analog(2), joystick::analog(1));*/
   lcdPrint(uart1, 1, "A: %d, M: %d", sensors::arm::get(), sensors::mogo::get());
   lcdPrint(uart1, 2, "B: %d", sensors::bar::get());
   delay(20);
